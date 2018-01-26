@@ -21,11 +21,12 @@ class Strategy:
     def trades(self):
         client = Client(api_key, api_secret)
         asset = "BNB"
-        balance= (client.get_asset_balance(asset='BTC'))
+        balance= (client.get_asset_balance('BTC'))
         balance = float(balance['free'])
         
         #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
         currentPrice = client.get_ticker(symbol='BNBBTC')
+        currentPrice=float(currentPrice['lastPrice'])
         firstBuyPrice = 10
 
         numberOfBuys =0
@@ -34,9 +35,9 @@ class Strategy:
         lowCertainty = firstBuyPrice * 0.95
         highCertainty = firstBuyPrice * 1.1
 
-        buylowCertainty= ((balance* 0.05)/currentPrice)
-        buyhighCertainty= ((balance * 0.10)/currentPrice)
-
+        buylowCertainty= float(round((balance* 0.05)/currentPrice))
+        buyhighCertainty= float(round((balance * 0.10)/currentPrice))
+        sellhighCertainty= float(round(balance * 0.95))
  
 
         cycle = 0
@@ -47,29 +48,29 @@ class Strategy:
         print colored('Auto Trading with binance', "cyan")
   
 
-       
+        while balance >0:
 
-        if currentPrice <= lowCertainty:
-            order = client.create_order(
-            symbol='BNBBTC',
-            side= Client.SIDE_BUY,
-            type=Client.ORDER_TYPE_MARKET,
-            quantity=buylowCertainty
-        )
-            firstBuyPrice = currentPrice
+            if currentPrice <= lowCertainty:
+                order = client.create_order(
+                symbol='BNBBTC',
+                side= Client.SIDE_BUY,
+                type=Client.ORDER_TYPE_MARKET,
+                quantity=buylowCertainty
+            )
+                firstBuyPrice = currentPrice
           
-        elif currentPrice>= highCertainty:
-            order = client.create_order(
-            symbol='BNBBTC',
-            side= Client.SIDE_BUY,
-            type=Client.ORDER_TYPE_MARKET,
-            quantity=buylowCertainty
-        )
-            firstBuyPrice = currentPrice
+            elif currentPrice>= highCertainty:
+                order = client.create_order(
+                symbol='BNBBTC',
+                side= Client.SIDE_BUY,
+                type=Client.ORDER_TYPE_MARKET,
+                quantity=buylowCertainty
+            )
+                firstBuyPrice = currentPrice
    
-     
 
-        while (cycle <= self.option.loop):
+
+        while (balance > 0):
 
             startTime = time.time()
 
@@ -82,8 +83,8 @@ class Strategy:
                time.sleep(self.wait_time - (endTime - startTime))
 
                # 0 = Unlimited loop
-               if self.option.loop > 0:
-                   cycle = cycle + 1
+               #if self.option.loop > 0:
+                #   cycle = cycle + 1
 
 strat = Strategy()
 strat.trades()
