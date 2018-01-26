@@ -4,8 +4,6 @@ import sys
 sys.path.insert(0, './app')
 
 from termcolor import colored
-from BinanceAPI import BinanceAPI
-
 import config
 from binance.client import Client
 from BinanceAPI import BinanceAPI
