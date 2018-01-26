@@ -1,4 +1,6 @@
-
+#!/usr/bin/python2.7
+# -*- coding: UTF-8 -*-
+# @yasinkuyu
 
 import sys
 
@@ -8,84 +10,108 @@ from termcolor import colored
 from BinanceAPI import BinanceAPI
 
 import config
-from binance.client import Client
-from BinanceAPI import BinanceAPI
-from Database import Database
-from Orders import Orders
-from Tools import Tools
 
-api_key = 'WBBcJ2miX5E9etn4Y9PxtujEoe8BDb4r3bPvwuoU7zkrFzMGPXvogeGPy7mLJ2vR'
-api_secret = '8boaOQWfqBr8ptjpFTurdJUwswyGcqRmP2UUOUb98Q8Uw5Is7bh363O0zpaZ0tA1'
+class Binance:
 
-class Strategy:
+    def __init__(self):
+        self.client = BinanceAPI(config.api_key, config.api_secret)
 
-    def trades(self):
-        client = Client(config.api_key, config.api_secret)
-
-        balance= client.get_asset_balance(asset='BTC')
-        trades= client.get-my_trades(symbol='BNBBTC')
-
-        allPrices= client.get_all_tickers()
-        #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
-        currentPrice = client.get_ticker(BTC)
-        firstBuyPrice = 10
-
-        numberOfBuys =0
+    def balances(self):
         balances = self.client.get_account()
 
-        lowCertainty = firstBuyPrice * 0.95
-        highCertainty = firstBuyPrice * 1.1
+        for balance in balances['balances']:
+            if float(balance['locked']) > 0 or float(balance['free']) > 0:
+                print ('%s: %s' % (balance['asset'], balance['free']))
 
-        buylowCertainty= ((balance * 0.05)/currentPrice)
-        buyhighCertainty= ((balance * 0.10)/currentPrice)
+    def balance(self, asset="BTC"):
+        balances = self.client.get_account()
 
- 
-
-        cycle = 0
-        actions = []
-
+        balances['balances'] = {item['asset']: item for item in balances['balances']}
         
+        print balances['balances'][asset]['free']
+                 
+    def orders(self, symbol, limit):
+        orders = self.client.get_open_orders(symbol, limit)
+        print orders
 
-        print colored('Auto Trading with binance', "cyan")
-  
+    def tickers(self, market):
+        return self.client.get_all_tickers()
 
-       
+    def ticker(self, markket):
+        return self.client.get_ticker()
 
-        if currentPrice <= lowCertainty:
-            order = client.create_order(
-            symbol='BNBBTC',
-            side= Client.SIDE_BUY,
-            type=Client.ORDER_TYPE_MARKET,
-            quantity=buylowCertainty
-        )
-            firstBuyPrice = currentPrice
-          
-        elif currentPrice>= highCertainty:
-            order = client.create_order(
-            symbol='BNBBTC',
-            side= Client.SIDE_BUY,
-            type=Client.ORDER_TYPE_MARKET,
-            quantity=buylowCertainty
-        )
-            firstBuyPrice = currentPrice
-   
-     
+    def kline(self, BTC):
+        return self.client.get_kline()
 
-        while (cycle <= self.option.loop):
+    def server_time(self):
+        return self.client.get_server_time()
 
-            startTime = time.time()
+    def openorders(self):
+        return self.client.get_open_orders()
+        
+    def profits(self, asset='BTC'):
+        
+        coins = self.client.get_products()
 
-            self.action(symbol)
+        for coin in coins['data']:
+            
+            if coin['quoteAsset'] == asset:
+                    
+                orders = self.client.get_orderbooks(coin['symbol'], 5)
+                lastBid = float(orders['bids'][0][0]) #last buy price (bid)
+                lastAsk = float(orders['asks'][0][0]) #last sell price (ask)
+    
+                profit = (lastAsk - lastBid) /  lastBid * 100
+            
+                print ('%.2f%% profit : %s (bid:%.8f-ask%.8f)' % (profit, coin['symbol'], lastBid, lastAsk))
+            
+try:
 
-            endTime = time.time()
+    m = Binance()
 
-            if endTime - startTime < self.wait_time:
+    print colored('1 -) Print orders', 'red')
+    print colored('2 -) Scan profits', 'blue')
+    print colored('3 -) List balances', 'green')
+    print colored('4 -) Check balance', 'cyan')
+    print colored('5 -) Check price', 'red')
+    print colored('Enter option number: Ex: 2', 'magenta')
 
-               time.sleep(self.wait_time - (endTime - startTime))
+    option = raw_input()
+    
+    if option is '1':
+        
+        print ('Enter symbol: Ex: XVGBTC')
+        
+        symbol = raw_input()
+        
+        # Orders
+        print ('%s Orders' % (symbol))
+        m.orders(symbol, 10)
+    
+    elif option is '3':
+        m.balances()
+    elif option is '4':
+        
+        print ('Enter asset: Ex: BTC')
+        
+        symbol = raw_input()
+        
+        print ('%s balance' % (symbol))
+        
+        m.balance(symbol)
+    elif option is '5':
+        m.kline()
+    elif option is '6':
+        m.tickers()
+    else:
+        
+        print ('Enter Asset (Ex: BTC, ETC, BNB, USDT)')
+        
+        asset = raw_input()
+        
+        print 'Profits scanning...'
+        m.profits(asset)
 
-               # 0 = Unlimited loop
-               if self.option.loop > 0:
-                   cycle = cycle + 1
-
-strat = Strategy()
-strat.trades()
+except 'BinanceAPIException' as e:
+    print (e.status_code)
+    print (e.message)
