@@ -1,9 +1,12 @@
 
+
 import sys
 
 sys.path.insert(0, './app')
 
 from termcolor import colored
+from BinanceAPI import BinanceAPI
+
 import config
 from binance.client import Client
 from BinanceAPI import BinanceAPI
@@ -36,19 +39,17 @@ class Strategy:
         buylowCertainty= ((balance * 0.05)/currentPrice)
         buyhighCertainty= ((balance * 0.10)/currentPrice)
 
- #Run it in a loop
-    def run(self):
+ 
 
         cycle = 0
         actions = []
 
-        symbol = self.option.symbol
+        
 
-        print colored('Auto Trading with binance --symbol: %s\n' % symbol, "cyan")
+        print colored('Auto Trading with binance', "cyan")
   
 
-        # Validate symbol
-        self.validate()
+       
 
         if currentPrice <= lowCertainty:
             order = client.create_order(
@@ -86,4 +87,5 @@ class Strategy:
                if self.option.loop > 0:
                    cycle = cycle + 1
 
-
+strat = Strategy()
+strat.trades()
