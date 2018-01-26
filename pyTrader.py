@@ -27,13 +27,14 @@ class Strategy:
         #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
         currentPrice = client.get_ticker(symbol='BNBBTC')
         currentPrice=float(currentPrice['lastPrice'])
-        firstBuyPrice = 10
+        firstBuyPrice = .00118
 
         numberOfBuys =0
         balances = client.get_account()
 
         lowCertainty = firstBuyPrice * 0.95
-        highCertainty = firstBuyPrice * 1.1
+        highCertainty = firstBuyPrice * 1.0
+        sellCertainty = firstBuyPrice * 1.1
 
         buylowCertainty= float(round((balance* 0.05)/currentPrice))
         buyhighCertainty= float(round((balance * 0.10)/currentPrice))
@@ -50,7 +51,7 @@ class Strategy:
 
         while balance >0:
 
-            if currentPrice <= lowCertainty:
+            if currentPrice >= lowCertainty and currentPrice< highCertainty:
                 order = client.create_order(
                 symbol='BNBBTC',
                 side= Client.SIDE_BUY,
@@ -58,6 +59,7 @@ class Strategy:
                 quantity=buylowCertainty
             )
                 firstBuyPrice = currentPrice
+                print colored('bought at low certainty', "blue")
           
             elif currentPrice>= highCertainty:
                 order = client.create_order(
@@ -67,24 +69,11 @@ class Strategy:
                 quantity=buylowCertainty
             )
                 firstBuyPrice = currentPrice
-   
-
-
-        while (balance > 0):
-
-            startTime = time.time()
-
-            self.action(symbol)
-
-            endTime = time.time()
-
-            if endTime - startTime < self.wait_time:
-
-               time.sleep(self.wait_time - (endTime - startTime))
-
-               # 0 = Unlimited loop
-               #if self.option.loop > 0:
-                #   cycle = cycle + 1
-
+                print colored('bought at high certainty', "blue")
+            elif currentPrice >= sellCertainty:
+                order = client.order_market_sell(
+                symbol='BNBBTC',
+                 quantity=sellhighCertainty)
+                print colored('sold at high certainty', "blue")
 strat = Strategy()
 strat.trades()
