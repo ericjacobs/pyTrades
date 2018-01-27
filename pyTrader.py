@@ -1,4 +1,3 @@
-
 import sys
 
 sys.path.insert(0, './app')
@@ -23,23 +22,28 @@ class Strategy:
         asset = "BNB"
         balance= (client.get_asset_balance('BTC'))
         balance = float(balance['free'])
-        
+        startBalance=(client.get_asset_balance('BTC'))
+        startBalance= float(startBalance['free'])
         #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
         currentPrice = client.get_ticker(symbol='BNBBTC')
         currentPrice=float(currentPrice['lastPrice'])
-        firstBuyPrice = .00118
+        firstBuyPrice = 11074.01
 
-        numberOfBuys =0
+        numberOfBuys = 0
         balances = client.get_account()
+       
 
-        lowCertainty = firstBuyPrice * 0.95
-        highCertainty = firstBuyPrice * 1.0
-        sellCertainty = firstBuyPrice * 1.1
+        lowCertainty = firstBuyPrice * .02
+        highCertainty = firstBuyPrice * .03
+        sellCertainty = firstBuyPrice * .7
 
-        buylowCertainty= float(round((balance* 0.05)/currentPrice))
+        buylowCertainty= float(round((balance * 0.05)/currentPrice))
         buyhighCertainty= float(round((balance * 0.10)/currentPrice))
         sellhighCertainty= float(round(balance * 0.95))
- 
+
+        lowCounter= 0
+        highCounter= 0
+        sellcounter = 0
 
         cycle = 0
         actions = []
@@ -47,33 +51,69 @@ class Strategy:
         
 
         print colored('Auto Trading with binance', "cyan")
+        print colored('Waiting to sell at', "blue")
+        print  sellCertainty
   
 
-        while balance >0:
-
-            if currentPrice >= lowCertainty and currentPrice< highCertainty:
+        
+        while balance>= (startBalance/2):
+            if currentPrice >= sellCertainty:
+                print colored('TEST', "blue")
                 order = client.create_order(
-                symbol='BNBBTC',
-                side= Client.SIDE_BUY,
-                type=Client.ORDER_TYPE_MARKET,
-                quantity=buylowCertainty
-            )
-                firstBuyPrice = currentPrice
-                print colored('bought at low certainty', "blue")
+                    symbol='BTCUSDT',
+                    side= Client.SIDE_SELL,
+                    type=Client.ORDER_TYPE_MARKET,
+                    quantity=sellhighCertainty
+                )
+                print colored('sold at high certainty', "blue")
+                sellcounter= sellcounter + 1
+                balance= (client.get_asset_balance('BTC'))
+                balance = float(balance['free'])
+            elif lowCounter <= 1 and currentPrice< highCertainty:
+                if currentPrice >= lowCertainty and currentPrice< highCertainty:
+                    order = client.create_order(
+                    symbol='BTCUSDT',
+                    side= Client.SIDE_BUY,
+                    type=Client.ORDER_TYPE_MARKET,
+                    quantity=buylowCertainty
+                )
+                    firstBuyPrice = currentPrice
+                    print colored('bought at low certainty', "blue")
+                    balance= (client.get_asset_balance('USDT'))
+                    balance = float(balance['free'])
+                    lowCounter= lowCounter +1
+                    print colored('Bought at', "green")
+                    print  firstBuyPrice
+                    print colored('Waiting to sell at', "blue")
+                    print  sellCertainty
           
-            elif currentPrice>= highCertainty:
+            elif currentPrice>= highCertainty and currentPrice < sellCertainty and highCounter < 1:
                 order = client.create_order(
-                symbol='BNBBTC',
+                symbol='BTCUSDT',
                 side= Client.SIDE_BUY,
                 type=Client.ORDER_TYPE_MARKET,
-                quantity=buylowCertainty
+                quantity=buyhighCertainty
             )
                 firstBuyPrice = currentPrice
                 print colored('bought at high certainty', "blue")
+                highCounter = highCounter + 1
+                balance= (client.get_asset_balance('BTC'))
+                balance = float(balance['free'])
+                print colored('Bought at', "green")
+                print  firstBuyPrice
+                print colored('Waiting to sell at', "blue")
+                print  sellCertainty
+
             elif currentPrice >= sellCertainty:
-                order = client.order_market_sell(
-                symbol='BNBBTC',
-                 quantity=sellhighCertainty)
+                order = client.create_order(
+                    symbol='BTCUSDT',
+                    side= Client.SIDE_SELL,
+                    type=Client.ORDER_TYPE_MARKET,
+                    quantity=sellhighCertainty
+                )
                 print colored('sold at high certainty', "blue")
+                sellcounter= sellcounter + 1
+                balance= (client.get_asset_balance('BTC'))
+                balance = float(balance['free'])
 strat = Strategy()
 strat.trades()
