@@ -9,8 +9,8 @@ from termcolor import colored
 from binance.client import Client
 
 
-api_key = 'WBBcJ2miX5E9etn4Y9PxtujEoe8BDb4r3bPvwuoU7zkrFzMGPXvogeGPy7mLJ2vR'
-api_secret = '8boaOQWfqBr8ptjpFTurdJUwswyGcqRmP2UUOUb98Q8Uw5Is7bh363O0zpaZ0tA1'
+api_key = MARSHALL, ADD YOUR KEY
+api_secret = MARSHALL, ADD YOUR SECRET
 
 class Strategy:
 
