@@ -20,12 +20,13 @@ class Strategy:
     def trades(self):
         client = Client(api_key, api_secret)
         asset = "BNB"
-        balance= (client.get_asset_balance('BTC'))
+        symbol ='BNBBTC'
+        balance= (client.get_asset_balance(asset))
         balance = float(balance['free'])
-        startBalance=(client.get_asset_balance('BTC'))
+        startBalance=(client.get_asset_balance(asset))
         startBalance= float(startBalance['free'])
         #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
-        currentPrice = client.get_ticker(symbol='BNBBTC')
+        currentPrice = client.get_ticker(symbol)
         currentPrice=float(currentPrice['lastPrice'])
         firstBuyPrice = 11074.01
 
@@ -115,5 +116,6 @@ class Strategy:
                 sellcounter= sellcounter + 1
                 balance= (client.get_asset_balance('BTC'))
                 balance = float(balance['free'])
+                
 strat = Strategy()
 strat.trades()
