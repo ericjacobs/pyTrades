@@ -27,6 +27,7 @@ class Strategy:
         #lastPrice = float(Orders.get_ticker(symbol)['lastPrice'])
         currentPrice = client.get_ticker(symbol =symbol)
         currentPrice=float(currentPrice['lastPrice'])
+        #MANUALLY CHANGE LINE 31 TO WHAT YOU WANT
         firstBuyPrice = 11074.01
 
         numberOfBuys = 0
@@ -59,6 +60,7 @@ class Strategy:
         while balance>= (startBalance/2):
             #Line 61 is not getting triggered all other statements seem fine
             if currentPrice >= sellCertainty:
+                #it never prints this. WHY? Code has forsaken me!
                 print colored('TEST', "blue")
                 order = client.create_order(
                     symbol='BTCUSDT',
@@ -67,10 +69,12 @@ class Strategy:
                     quantity=sellhighCertainty
                 )
                 print colored('sold at high certainty', "blue")
+                #increase count
                 sellcounter= sellcounter + 1
+                #recheck balance
                 balance= (client.get_asset_balance('BTC'))
                 balance = float(balance['free'])
-                
+
             #Checks to see if it should buy at low settings
             elif lowCounter <= 1 and currentPrice< highCertainty:
                 if currentPrice >= lowCertainty and currentPrice< highCertainty:
@@ -82,8 +86,10 @@ class Strategy:
                 )
                     firstBuyPrice = currentPrice
                     print colored('bought at low certainty', "blue")
+                    #recheck the balance
                     balance= (client.get_asset_balance('USDT'))
                     balance = float(balance['free'])
+                    #increase count
                     lowCounter= lowCounter +1
                     print colored('Bought at', "green")
                     print  firstBuyPrice
@@ -100,7 +106,9 @@ class Strategy:
             )
                 firstBuyPrice = currentPrice
                 print colored('bought at high certainty', "blue")
+                #increase counter
                 highCounter = highCounter + 1
+                #recheck balance
                 balance= (client.get_asset_balance('BTC'))
                 balance = float(balance['free'])
                 print colored('Bought at', "green")
@@ -115,7 +123,9 @@ class Strategy:
                    quantity=20
                 )
                 print colored('sold at high certainty', "blue")
+                #increase counter
                 sellcounter= sellcounter + 1
+                #reset balance
                 balance= (client.get_asset_balance('BTC'))
                 balance = float(balance['free'])
                 
