@@ -8,6 +8,7 @@ pip install python-binance
 
 
 To run: 
+Github link:https://github.com/colleenlavin/pyTrades
 
 Get to the folder in terminal: cd desktop , cd pyTrades
 
@@ -23,6 +24,4 @@ Symbol is the pair you're trading.
 Exit by hitting CTRL (not apple) Z
 
 Test.py is basically the same program, I was just using it to test things. Leaving it in case it's eventually useful. 
-
-
-
+ Don't push with your keys showing. Make a secret file. 
