@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 1.5em;
+        }
+
+        h2 {
+            font-size: 1.3em;
+        }
+
+        .highlight {
+            max-width: 50em;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            background-color: #eee;
+            white-space: pre-wrap;
+            height: 100vh;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+
+        .highlight pre {
+            margin: 0;
+        }
+
+        .hll { background-color: #ffffcc }
+.c { color: #408080; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.cp { color: #BC7A00 } /* Comment.Preproc */
+.cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #408080; font-style: italic } /* Comment.Single */
+.cs { color: #408080; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.gr { color: #FF0000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #00A000 } /* Generic.Inserted */
+.go { color: #888888 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #7D9029 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #999999; font-weight: bold } /* Name.Entity */
+.ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #A0A000 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #BB6688 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+
+        .annotation-comment {
+            display: block;
+            background-color: #FEFAAD;
+            white-space: normal;
+            padding: 5px 10px;
+            margin: 5px -10px;
+        }
+
+        .annotation-comment .document > * {
+            margin: 0;
+        }
+
+        .annotation-comment .document > * + * {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="highlight"><pre><span></span><a name="line-1"></a><span class="gh">diff --git a/pyTrader.py b/pyTrader.py</span>
+<a name="line-2"></a><span class="gh">index 19ca0c5..3fba815 100644</span>
+<a name="line-3"></a><span class="gd">--- a/pyTrader.py</span>
+<a name="line-4"></a><span class="gi">+++ b/pyTrader.py</span>
+<a name="line-5"></a><span class="gu">@@ -1,6 +1,6 @@</span>
+<a name="line-6"></a> import sys
+<a name="line-7"></a>
+<a name="line-8"></a><div class="annotation-comment"><div class="document">
+<p>The below line had no effect since we don't have an app directory.</p>
+</div>
+</div><a name="line-9"></a><span class="gd">-sys.path.insert(0, &#39;./app&#39;)</span>
+<a name="line-10"></a><span class="gi">+#sys.path.insert(0, &#39;./app&#39;)</span>
+<a name="line-11"></a> 
+<a name="line-12"></a> from termcolor import colored
+<a name="line-13"></a> 
+<a name="line-14"></a><span class="gu">@@ -9,17 +9,24 @@ from termcolor import colored</span>
+<a name="line-15"></a> from binance.client import Client
+<a name="line-16"></a> 
+<a name="line-17"></a>
+<a name="line-18"></a><div class="annotation-comment"><div class="document">
+<p>Best practice here for handling secrets (like API keys): Move the settings
+into a separate file, and gitignore this file. This prevents us
+from accidentally committing the secrets (Murphy's Law!)</p>
+</div>
+</div><a name="line-19"></a><span class="gd">-api_key = MARSHALL, ADD YOUR KEY</span>
+<a name="line-20"></a><span class="gd">-api_secret = MARSHALL, ADD YOUR SECRET</span>
+<a name="line-21"></a><span class="gi">+from apikeys import api_key, api_secret</span>
+<a name="line-22"></a><span class="gi">+</span>
+<a name="line-23"></a><span class="gi">+import math</span>
+<a name="line-24"></a><span class="gi">+import time</span>
+<a name="line-25"></a><span class="gi">+</span>
+<a name="line-26"></a> 
+<a name="line-27"></a> class Strategy:
+<a name="line-28"></a> 
+<a name="line-29"></a>     def trades(self):
+<a name="line-30"></a>         client = Client(api_key, api_secret)
+<a name="line-31"></a>
+<a name="line-32"></a><div class="annotation-comment"><div class="document">
+<p>Here we want to explicitly set the to and from currencies. Then
+we can form the trading symbol and it will always be right.</p>
+</div>
+</div><a name="line-33"></a>
+<a name="line-34"></a><span class="gd">-        #Change ths to change the asset you&#39;re buying witg</span>
+<a name="line-35"></a><span class="gi">+        # Change this to change the asset you&#39;re buying</span>
+<a name="line-36"></a>         asset = &quot;BNB&quot;
+<a name="line-37"></a><span class="gd">-        #Change pair you&#39;re trading</span>
+<a name="line-38"></a><span class="gd">-        symbol =&#39;BNBBTC&#39;</span>
+<a name="line-39"></a><span class="gi">+        # Change this to change the asset you&#39;re paying with</span>
+<a name="line-40"></a><span class="gi">+        otherasset = &quot;USDT&quot;</span>
+<a name="line-41"></a><span class="gi">+</span>
+<a name="line-42"></a><span class="gi">+        # Calculate pair you&#39;re trading</span>
+<a name="line-43"></a><span class="gi">+        symbol = asset + otherasset</span>
+<a name="line-44"></a><span class="gi">+</span>
+<a name="line-45"></a>         balance= (client.get_asset_balance(asset))
+<a name="line-46"></a>         balance = float(balance[&#39;free&#39;])
+<a name="line-47"></a>         startBalance=(client.get_asset_balance(asset))
+<a name="line-48"></a><span class="gu">@@ -27,20 +34,45 @@ class Strategy:</span>
+<a name="line-49"></a>         #lastPrice = float(Orders.get_ticker(symbol)[&#39;lastPrice&#39;])
+<a name="line-50"></a>         currentPrice = client.get_ticker(symbol =symbol)
+<a name="line-51"></a>         currentPrice=float(currentPrice[&#39;lastPrice&#39;])
+<a name="line-52"></a><span class="gd">-        #MANUALLY CHANGE LINE 31 TO WHAT YOU WANT</span>
+<a name="line-53"></a><span class="gd">-        firstBuyPrice = 11074.01</span>
+<a name="line-54"></a><span class="gi">+        #MANUALLY CHANGE LINE 37 TO WHAT YOU WANT</span>
+<a name="line-55"></a><span class="gi">+        firstBuyPrice = 13.4</span>
+<a name="line-56"></a><span class="gi">+</span>
+<a name="line-57"></a>
+<a name="line-58"></a><div class="annotation-comment"><div class="document">
+<p>The following code gets information about the Binance LOT_SIZE
+restrictions. It specifies a min and max quantity, and the step
+size (smallest fraction) that can be traded. We are responsible
+for ensuring this is done correctly, or else the API will reject
+the trade.</p>
+</div>
+</div><a name="line-59"></a>
+<a name="line-60"></a><span class="gi">+        # Get the min and max quantity for trading under this symbol.</span>
+<a name="line-61"></a><span class="gi">+        symbolInfo = client.get_symbol_info(symbol)</span>
+<a name="line-62"></a><span class="gi">+        symbolFilters = {filt[&#39;filterType&#39;]: filt</span>
+<a name="line-63"></a><span class="gi">+                             for filt in symbolInfo[&#39;filters&#39;]}</span>
+<a name="line-64"></a><span class="gi">+        lotSizeFilter = symbolFilters.get(&#39;LOT_SIZE&#39;, {})</span>
+<a name="line-65"></a><span class="gi">+        lotSizeMinQty = float(lotSizeFilter.get(&#39;minQty&#39;, 0.0))</span>
+<a name="line-66"></a><span class="gi">+        lotSizeMaxQty = float(lotSizeFilter.get(&#39;maxQty&#39;, 0.0))</span>
+<a name="line-67"></a><span class="gi">+        lotSizeStep = float(lotSizeFilter.get(&#39;stepSize&#39;, 0.0))</span>
+<a name="line-68"></a><span class="gi">+</span>
+<a name="line-69"></a><span class="gi">+        # This is the number of digits we should round to in order</span>
+<a name="line-70"></a><span class="gi">+        # to conform to the lot&#39;s stepSize restriction.</span>
+<a name="line-71"></a><span class="gi">+        lotSizeStepNumDigits = int(round(-math.log(lotSizeStep, 10)))</span>
+<a name="line-72"></a> 
+<a name="line-73"></a>         numberOfBuys = 0
+<a name="line-74"></a>         balances = client.get_account()
+<a name="line-75"></a><span class="gd">-       </span>
+<a name="line-76"></a> 
+<a name="line-77"></a><span class="gi">+        # How much of asset we want to work with.</span>
+<a name="line-78"></a><span class="gi">+        wantedBalance = 8</span>
+<a name="line-79"></a><span class="gi">+</span>
+<a name="line-80"></a>
+<a name="line-81"></a><div class="annotation-comment"><div class="document">
+<p>The buy levels 0.5%, 1.0%, 1.5% and the amount we want to buy at those prices.</p>
+</div>
+</div><a name="line-82"></a>
+<a name="line-83"></a><span class="gi">+        buyLevel1 = firstBuyPrice * 0.995	# 0.5%</span>
+<a name="line-84"></a><span class="gi">+        buyLevel2 = firstBuyPrice * 0.99	# 1.0%</span>
+<a name="line-85"></a><span class="gi">+        buyLevel3 = firstBuyPrice * 0.985	# 1.5%</span>
+<a name="line-86"></a><span class="gi">+</span>
+<a name="line-87"></a><span class="gi">+        buyAmount1 = wantedBalance * 0.25	# How much to buy at buyLevel1 price.</span>
+<a name="line-88"></a><span class="gi">+        buyAmount2 = wantedBalance * 0.35	# How much to buy at buyLevel2 price.</span>
+<a name="line-89"></a><span class="gi">+        buyAmount3 = wantedBalance * 0.50	# How much to buy at buyLevel3 price.</span>
+<a name="line-90"></a><span class="gi">+</span>
+<a name="line-91"></a><span class="gi">+</span>
+<a name="line-92"></a><span class="gi">+        # TODO: Remove Certainty processing.</span>
+<a name="line-93"></a>         lowCertainty = firstBuyPrice * .02
+<a name="line-94"></a>         highCertainty = firstBuyPrice * .03
+<a name="line-95"></a><span class="gd">-        sellCertainty = firstBuyPrice * .7</span>
+<a name="line-96"></a><span class="gi">+        sellLevel = firstBuyPrice * 1.002</span>
+<a name="line-97"></a> 
+<a name="line-98"></a>         buylowCertainty= float(round((balance * 0.05)/currentPrice))
+<a name="line-99"></a>         buyhighCertainty= float(round((balance * 0.10)/currentPrice))
+<a name="line-100"></a><span class="gd">-        sellhighCertainty= float(round(balance * 0.95))</span>
+<a name="line-101"></a><span class="gi">+        sellhighAmount= float(round(balance * 0.95))</span>
+<a name="line-102"></a> 
+<a name="line-103"></a>         lowCounter= 0
+<a name="line-104"></a>         highCounter= 0
+<a name="line-105"></a><span class="gu">@@ -49,37 +81,131 @@ class Strategy:</span>
+<a name="line-106"></a>         cycle = 0
+<a name="line-107"></a>         actions = []
+<a name="line-108"></a>
+<a name="line-109"></a><div class="annotation-comment"><div class="document">
+<p>This is work-in-progress of the three-level buying strategy.</p>
+</div>
+</div><a name="line-110"></a> 
+<a name="line-111"></a><span class="gd">-        </span>
+<a name="line-112"></a><span class="gi">+        otherbalance= (client.get_asset_balance(otherasset))</span>
+<a name="line-113"></a><span class="gi">+        otherbalance = float(otherbalance[&#39;free&#39;])</span>
+<a name="line-114"></a><span class="gi">+</span>
+<a name="line-115"></a><span class="gi">+        if balance &lt; wantedBalance:</span>
+<a name="line-116"></a><span class="gi">+</span>
+<a name="line-117"></a><span class="gi">+            print colored(&#39;Auto Trading with binance&#39;, &quot;cyan&quot;)</span>
+<a name="line-118"></a><span class="gi">+            print colored(&#39;Waiting to buy at&#39;, &quot;blue&quot;), buyLevel1, buyLevel2, buyLevel3</span>
+<a name="line-119"></a><span class="gi">+            print colored(&#39;Waiting to sell at&#39;, &quot;blue&quot;), sellLevel</span>
+<a name="line-120"></a><span class="gi">+</span>
+<a name="line-121"></a><span class="gi">+            while balance &lt; wantedBalance:</span>
+<a name="line-122"></a><span class="gi">+</span>
+<a name="line-123"></a><span class="gi">+                time.sleep(5)</span>
+<a name="line-124"></a><span class="gi">+                currentPrice = client.get_ticker(symbol=symbol)</span>
+<a name="line-125"></a><span class="gi">+                currentPrice = float(currentPrice[&#39;lastPrice&#39;])</span>
+<a name="line-126"></a><span class="gi">+</span>
+<a name="line-127"></a><span class="gi">+                print &#39;balance=&#39;, balance, asset, &#39;  otherbalance=&#39;, otherbalance, otherasset</span>
+<a name="line-128"></a><span class="gi">+                print &#39;currentPrice=&#39;, currentPrice, &#39; buyLevels=&#39;, buyLevel1, buyLevel2, buyLevel3</span>
+<a name="line-129"></a><span class="gi">+</span>
+<a name="line-130"></a><span class="gi">+                canBuy = round(otherbalance / currentPrice, lotSizeStepNumDigits)</span>
+<a name="line-131"></a><span class="gi">+                print &#39;We can now buy (up to)&#39;, canBuy, &#39;of&#39;, asset</span>
+<a name="line-132"></a><span class="gi">+</span>
+<a name="line-133"></a><span class="gi">+                if currentPrice &lt;= buyLevel3:</span>
+<a name="line-134"></a><span class="gi">+                    qty = min(canBuy, wantedBalance * 0.50)</span>
+<a name="line-135"></a><span class="gi">+                    print &#39;Hit buyLevel3&#39;, qty</span>
+<a name="line-136"></a><span class="gi">+</span>
+<a name="line-137"></a><span class="gi">+                    order = client.create_order(</span>
+<a name="line-138"></a><span class="gi">+                        symbol=symbol,</span>
+<a name="line-139"></a><span class="gi">+                        side= Client.SIDE_BUY,</span>
+<a name="line-140"></a><span class="gi">+                        type=Client.ORDER_TYPE_MARKET,</span>
+<a name="line-141"></a><span class="gi">+                        quantity=qty</span>
+<a name="line-142"></a><span class="gi">+                    )</span>
+<a name="line-143"></a><span class="gi">+                    buyLevel3 = 0</span>
+<a name="line-144"></a><span class="gi">+</span>
+<a name="line-145"></a><span class="gi">+                    balance = (client.get_asset_balance(asset))</span>
+<a name="line-146"></a><span class="gi">+                    balance = float(balance[&#39;free&#39;])</span>
+<a name="line-147"></a><span class="gi">+                    otherbalance = (client.get_asset_balance(otherasset))</span>
+<a name="line-148"></a><span class="gi">+                    otherbalance = float(otherbalance[&#39;free&#39;])</span>
+<a name="line-149"></a><span class="gi">+                    break</span>
+<a name="line-150"></a><span class="gi">+</span>
+<a name="line-151"></a><span class="gi">+                elif currentPrice &lt;= buyLevel2:</span>
+<a name="line-152"></a><span class="gi">+                    qty = min(canBuy, wantedBalance * 0.35)</span>
+<a name="line-153"></a><span class="gi">+                    print &#39;Hit buyLevel2&#39;, qty</span>
+<a name="line-154"></a><span class="gi">+</span>
+<a name="line-155"></a><span class="gi">+                    order = client.create_order(</span>
+<a name="line-156"></a><span class="gi">+                        symbol=symbol,</span>
+<a name="line-157"></a><span class="gi">+                        side= Client.SIDE_BUY,</span>
+<a name="line-158"></a><span class="gi">+                        type=Client.ORDER_TYPE_MARKET,</span>
+<a name="line-159"></a><span class="gi">+                        quantity=qty</span>
+<a name="line-160"></a><span class="gi">+                    )</span>
+<a name="line-161"></a><span class="gi">+                    buyLevel2 = 0</span>
+<a name="line-162"></a><span class="gi">+</span>
+<a name="line-163"></a><span class="gi">+                elif currentPrice &lt;= buyLevel1:</span>
+<a name="line-164"></a><span class="gi">+                    qty = min(canBuy, wantedBalance * 0.25)</span>
+<a name="line-165"></a><span class="gi">+                    print &#39;Hit buyLevel1&#39;, qty</span>
+<a name="line-166"></a><span class="gi">+</span>
+<a name="line-167"></a><span class="gi">+                    order = client.create_order(</span>
+<a name="line-168"></a><span class="gi">+                        symbol=symbol,</span>
+<a name="line-169"></a><span class="gi">+                        side= Client.SIDE_BUY,</span>
+<a name="line-170"></a><span class="gi">+                        type=Client.ORDER_TYPE_MARKET,</span>
+<a name="line-171"></a><span class="gi">+                        quantity=min(canBuy, wantedBalance * 0.25)</span>
+<a name="line-172"></a><span class="gi">+                    )</span>
+<a name="line-173"></a><span class="gi">+                    buyLevel1 = 0</span>
+<a name="line-174"></a><span class="gi">+</span>
+<a name="line-175"></a><span class="gi">+                elif currentPrice &gt;= sellLevel and balance &gt; lotSizeMinQty:</span>
+<a name="line-176"></a><span class="gi">+                    qty = round(balance * 0.95, lotSizeStepNumDigits)</span>
+<a name="line-177"></a><span class="gi">+</span>
+<a name="line-178"></a><span class="gi">+                    print colored(&#39;TEST-sellLevel exceeded&#39;, &quot;blue&quot;),</span>
+<a name="line-179"></a><span class="gi">+                    print qty</span>
+<a name="line-180"></a><span class="gi">+                    order = client.create_order(</span>
+<a name="line-181"></a><span class="gi">+                        symbol=symbol,</span>
+<a name="line-182"></a><span class="gi">+                        side= Client.SIDE_SELL,</span>
+<a name="line-183"></a><span class="gi">+                        type=Client.ORDER_TYPE_MARKET,</span>
+<a name="line-184"></a><span class="gi">+                        quantity=qty</span>
+<a name="line-185"></a><span class="gi">+                    )</span>
+<a name="line-186"></a><span class="gi">+                    print colored(&#39;sold at &#39; + str(currentPrice), &quot;blue&quot;)</span>
+<a name="line-187"></a><span class="gi">+                    #increase count</span>
+<a name="line-188"></a><span class="gi">+                    sellcounter= sellcounter + 1</span>
+<a name="line-189"></a><span class="gi">+</span>
+<a name="line-190"></a><span class="gi">+                balance = (client.get_asset_balance(asset))</span>
+<a name="line-191"></a><span class="gi">+                balance = float(balance[&#39;free&#39;])</span>
+<a name="line-192"></a><span class="gi">+                otherbalance = (client.get_asset_balance(otherasset))</span>
+<a name="line-193"></a><span class="gi">+                otherbalance = float(otherbalance[&#39;free&#39;])</span>
+<a name="line-194"></a> 
+<a name="line-195"></a>         print colored(&#39;Auto Trading with binance&#39;, &quot;cyan&quot;)
+<a name="line-196"></a>         print colored(&#39;Waiting to sell at&#39;, &quot;blue&quot;)
+<a name="line-197"></a><span class="gd">-        print  sellCertainty</span>
+<a name="line-198"></a><span class="gd">-  </span>
+<a name="line-199"></a><span class="gi">+        print sellLevel</span>
+<a name="line-200"></a> 
+<a name="line-201"></a><span class="gd">-        </span>
+<a name="line-202"></a>         while balance&gt;= (startBalance/2):
+<a name="line-203"></a><span class="gi">+</span>
+<a name="line-204"></a>
+<a name="line-205"></a><div class="annotation-comment"><div class="document">
+<p>We want to sleep for some seconds here to avoid hitting the rate-limit
+of the API. This could be customized differently for different currencies.
+Also we need to fetch the current price.</p>
+</div>
+</div><a name="line-206"></a>
+<a name="line-207"></a><span class="gi">+            time.sleep(5)</span>
+<a name="line-208"></a><span class="gi">+            currentPrice = client.get_ticker(symbol =symbol)</span>
+<a name="line-209"></a><span class="gi">+            currentPrice=float(currentPrice[&#39;lastPrice&#39;])</span>
+<a name="line-210"></a><span class="gi">+</span>
+<a name="line-211"></a><span class="gi">+            print &#39;balance=&#39;, balance</span>
+<a name="line-212"></a><span class="gi">+            print &#39;currentPrice=&#39;, currentPrice, &#39;  sellLevel=&#39;, sellLevel</span>
+<a name="line-213"></a><span class="gi">+</span>
+<a name="line-214"></a>             #Line 61 is not getting triggered all other statements seem fine
+<a name="line-215"></a><span class="gd">-            if currentPrice &gt;= sellCertainty:</span>
+<a name="line-216"></a><span class="gi">+            if currentPrice &gt;= sellLevel:</span>
+<a name="line-217"></a>                 #it never prints this. WHY? Code has forsaken me!
+<a name="line-218"></a>                 print colored(&#39;TEST&#39;, &quot;blue&quot;)
+<a name="line-219"></a>                 order = client.create_order(
+<a name="line-220"></a>
+<a name="line-221"></a><div class="annotation-comment"><div class="document">
+<p>Always use the correct symbol, or we'll make the wrong trade.</p>
+</div>
+</div><a name="line-222"></a>
+<a name="line-223"></a><span class="gd">-                    symbol=&#39;BTCUSDT&#39;,</span>
+<a name="line-224"></a><span class="gi">+                    symbol=symbol,</span>
+<a name="line-225"></a>                     side= Client.SIDE_SELL,
+<a name="line-226"></a>                     type=Client.ORDER_TYPE_MARKET,
+<a name="line-227"></a><span class="gd">-                    quantity=sellhighCertainty</span>
+<a name="line-228"></a><span class="gi">+                    quantity=sellhighAmount</span>
+<a name="line-229"></a>                 )
+<a name="line-230"></a><span class="gd">-                print colored(&#39;sold at high certainty&#39;, &quot;blue&quot;)</span>
+<a name="line-231"></a><span class="gi">+                print colored(&#39;sold at &#39; + str(currentPrice), &quot;blue&quot;)</span>
+<a name="line-232"></a>                 #increase count
+<a name="line-233"></a>                 sellcounter= sellcounter + 1
+<a name="line-234"></a>                 #recheck balance
+<a name="line-235"></a>
+<a name="line-236"></a><div class="annotation-comment"><div class="document">
+<p>The balance should be fetched using the correct asset.</p>
+</div>
+</div><a name="line-237"></a>
+<a name="line-238"></a><span class="gd">-                balance= (client.get_asset_balance(&#39;BTC&#39;))</span>
+<a name="line-239"></a><span class="gi">+                balance= (client.get_asset_balance(asset))</span>
+<a name="line-240"></a>                 balance = float(balance[&#39;free&#39;])
+<a name="line-241"></a> 
+<a name="line-242"></a><span class="gi">+            continue</span>
+<a name="line-243"></a><span class="gi">+</span>
+<a name="line-244"></a><span class="gi">+            #</span>
+<a name="line-245"></a><span class="gi">+            # TODO: Convert remaining code in this block to new three-level</span>
+<a name="line-246"></a><span class="gi">+            # strategy.</span>
+<a name="line-247"></a><span class="gi">+            #</span>
+<a name="line-248"></a><span class="gi">+</span>
+<a name="line-249"></a>             #Checks to see if it should buy at low settings
+<a name="line-250"></a><span class="gd">-            elif lowCounter &lt;= 1 and currentPrice&lt; highCertainty:</span>
+<a name="line-251"></a><span class="gi">+            if lowCounter &lt;= 1 and currentPrice&lt; highCertainty:</span>
+<a name="line-252"></a>                 if currentPrice &gt;= lowCertainty and currentPrice&lt; highCertainty:
+<a name="line-253"></a>                     order = client.create_order(
+<a name="line-254"></a><span class="gd">-                    symbol=&#39;BTCUSDT&#39;,</span>
+<a name="line-255"></a><span class="gi">+                    symbol=symbol,</span>
+<a name="line-256"></a>                     side= Client.SIDE_BUY,
+<a name="line-257"></a>                     type=Client.ORDER_TYPE_MARKET,
+<a name="line-258"></a>                     quantity=buylowCertainty
+<a name="line-259"></a><span class="gu">@@ -87,17 +213,17 @@ class Strategy:</span>
+<a name="line-260"></a>                     firstBuyPrice = currentPrice
+<a name="line-261"></a>                     print colored(&#39;bought at low certainty&#39;, &quot;blue&quot;)
+<a name="line-262"></a>                     #recheck the balance
+<a name="line-263"></a><span class="gd">-                    balance= (client.get_asset_balance(&#39;USDT&#39;))</span>
+<a name="line-264"></a><span class="gi">+                    balance= (client.get_asset_balance(asset))</span>
+<a name="line-265"></a>                     balance = float(balance[&#39;free&#39;])
+<a name="line-266"></a>                     #increase count
+<a name="line-267"></a>                     lowCounter= lowCounter +1
+<a name="line-268"></a>                     print colored(&#39;Bought at&#39;, &quot;green&quot;)
+<a name="line-269"></a>                     print  firstBuyPrice
+<a name="line-270"></a>                     print colored(&#39;Waiting to sell at&#39;, &quot;blue&quot;)
+<a name="line-271"></a><span class="gd">-                    print  sellCertainty</span>
+<a name="line-272"></a><span class="gi">+                    print  sellLevel</span>
+<a name="line-273"></a> 
+<a name="line-274"></a>              #Checks to see if it should buy at high settings
+<a name="line-275"></a><span class="gd">-            elif currentPrice&gt;= highCertainty and currentPrice &lt; sellCertainty and highCounter &lt; 1:</span>
+<a name="line-276"></a><span class="gi">+            elif currentPrice&gt;= highCertainty and currentPrice &lt; sellLevel and highCounter &lt; 1:</span>
+<a name="line-277"></a>                 order = client.create_order(
+<a name="line-278"></a>                 symbol=&#39;BTCUSDT&#39;,
+<a name="line-279"></a>                 side= Client.SIDE_BUY,
+<a name="line-280"></a><span class="gu">@@ -109,15 +235,15 @@ class Strategy:</span>
+<a name="line-281"></a>                 #increase counter
+<a name="line-282"></a>                 highCounter = highCounter + 1
+<a name="line-283"></a>                 #recheck balance
+<a name="line-284"></a><span class="gd">-                balance= (client.get_asset_balance(&#39;BTC&#39;))</span>
+<a name="line-285"></a><span class="gi">+                balance= (client.get_asset_balance(asset))</span>
+<a name="line-286"></a>                 balance = float(balance[&#39;free&#39;])
+<a name="line-287"></a>                 print colored(&#39;Bought at&#39;, &quot;green&quot;)
+<a name="line-288"></a>                 print  firstBuyPrice
+<a name="line-289"></a>                 print colored(&#39;Waiting to sell at&#39;, &quot;blue&quot;)
+<a name="line-290"></a><span class="gd">-                print  sellCertainty</span>
+<a name="line-291"></a><span class="gi">+                print  sellLevel</span>
+<a name="line-292"></a> 
+<a name="line-293"></a><span class="gd">-            #Also tried selling here. Damn thing not working. </span>
+<a name="line-294"></a><span class="gd">-            elif currentPrice &gt;= sellCertainty:</span>
+<a name="line-295"></a><span class="gi">+            #Also tried selling here. Damn thing not working.</span>
+<a name="line-296"></a><span class="gi">+            elif currentPrice &gt;= sellLevel:</span>
+<a name="line-297"></a>                 order =client.order_limit_sell(
+<a name="line-298"></a>                    symbol=&#39;BTCUSDT&#39;,
+<a name="line-299"></a>                    quantity=20
+<a name="line-300"></a><span class="gu">@@ -126,8 +252,8 @@ class Strategy:</span>
+<a name="line-301"></a>                 #increase counter
+<a name="line-302"></a>                 sellcounter= sellcounter + 1
+<a name="line-303"></a>                 #reset balance
+<a name="line-304"></a><span class="gd">-                balance= (client.get_asset_balance(&#39;BTC&#39;))</span>
+<a name="line-305"></a><span class="gi">+                balance= (client.get_asset_balance(asset))</span>
+<a name="line-306"></a>                 balance = float(balance[&#39;free&#39;])
+<a name="line-307"></a><span class="gd">-                </span>
+<a name="line-308"></a><span class="gi">+</span>
+<a name="line-309"></a> strat = Strategy()
+<a name="line-310"></a> strat.trades()
+</pre></div>
+
+    <script type="text/annotations">
+    [
+  [
+    null,
+    false,
+    2,
+    "The below line had no effect since we don't have an app directory."
+  ],
+  [
+    null,
+    false,
+    3,
+    "Best practice here for handling secrets (like API keys): Move the settings"
+  ],
+  [
+    null,
+    false,
+    3,
+    "into a separate file, and gitignore this file. This prevents us"
+  ],
+  [
+    null,
+    false,
+    3,
+    "from accidentally committing the secrets (Murphy's Law!)"
+  ],
+  [
+    null,
+    false,
+    4,
+    "Here we want to explicitly set the to and from currencies. Then"
+  ],
+  [
+    null,
+    false,
+    4,
+    "we can form the trading symbol and it will always be right."
+  ],
+  [
+    null,
+    false,
+    6,
+    "The following code gets information about the Binance LOT_SIZE"
+  ],
+  [
+    null,
+    false,
+    6,
+    "restrictions. It specifies a min and max quantity, and the step"
+  ],
+  [
+    null,
+    false,
+    6,
+    "size (smallest fraction) that can be traded. We are responsible"
+  ],
+  [
+    null,
+    false,
+    6,
+    "for ensuring this is done correctly, or else the API will reject"
+  ],
+  [
+    null,
+    false,
+    6,
+    "the trade."
+  ],
+  [
+    null,
+    false,
+    8,
+    "The buy levels 0.5%, 1.0%, 1.5% and the amount we want to buy at those prices."
+  ],
+  [
+    null,
+    false,
+    10,
+    "This is work-in-progress of the three-level buying strategy."
+  ],
+  [
+    null,
+    false,
+    11,
+    "We want to sleep for some seconds here to avoid hitting the rate-limit"
+  ],
+  [
+    null,
+    false,
+    11,
+    "of the API. This could be customized differently for different currencies."
+  ],
+  [
+    null,
+    false,
+    11,
+    "Also we need to fetch the current price."
+  ],
+  [
+    null,
+    false,
+    13,
+    "Always use the correct symbol, or we'll make the wrong trade."
+  ],
+  [
+    null,
+    false,
+    15,
+    "The balance should be fetched using the correct asset."
+  ]
+]
+    </script>
+</body>
+</html>
