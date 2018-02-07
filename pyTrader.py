@@ -44,16 +44,20 @@ class Strategy:
         lotSizeStepNumDigits = int(round(-math.log(lotSizeStep, 10)))
 
         numberOfBuys = 0
-        balances = client.get_account()
+        otherbalance = (client.get_asset_balance(otherasset))
+        otherbalance = _d(otherbalance['free'])
 
-        # How much of otherasset (e.g. BTC) we want to work with
-        baseBalance = _d(0.0104)			# Base currency balance
+        # How much of otherasset (e.g. BTC) we want to work with, expressed as
+        # fraction of the current balance of otherasset.
+        baseBalanceFraction = _d(0.2)       # 20% of current balance
+        baseBalance = otherbalance * baseBalanceFraction
 
         cycle = 0
         actions = []
         openBuys = {}
-        
+
         print colored('Auto Trading with binance', "cyan")
+        print 'Trading with', baseBalance, 'of', otherasset
 
         while True:
             buyPrice = market.price(asset, otherasset, minsAgo=5)
@@ -75,7 +79,7 @@ class Strategy:
             currentPrice = market.price(asset, otherasset)
             print symbol, '=', currentPrice, '   (', currentPrice / buyPrice, ' since 5 mins ago)'
             print 'Open buys:', openBuys
-            
+
             for buyLevel, buyPrice in openBuys.items():
                 if buyPrice > 0 and currentPrice >= buyPrice:
                     print 'Cleared buyLevel', buyLevel
@@ -86,7 +90,7 @@ class Strategy:
                 wantQty = buySpend3 / currentPrice
                 print 'Hit buyLevel3', wantQty, asset
                 buyLevel = 3
-            
+
             elif currentPrice <= buyLevel2 and not openBuys.get(2):
                 wantQty = buySpend2 / currentPrice
                 print 'Hit buyLevel2', wantQty, asset
@@ -96,7 +100,7 @@ class Strategy:
                 wantQty = buySpend1 / currentPrice
                 print 'Hit buyLevel1', wantQty, asset
                 buyLevel = 1
-                
+
             if wantQty:
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
                 print 'Buying', qty, 'of', asset, 'to sell for', sellLevel
@@ -119,7 +123,7 @@ class Strategy:
                     price='{0:f}'.format(sellLevel),
                     quantity='{0:f}'.format(qty)
                 )
-                
+
                 openBuys[buyLevel] = sellLevel
 
                 balance = (client.get_asset_balance(asset))
