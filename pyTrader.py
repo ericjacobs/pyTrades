@@ -60,24 +60,24 @@ class Strategy:
         print 'Trading with', baseBalance, 'of', otherasset
 
         while True:
-            buyPrice = market.price(asset, otherasset, minsAgo=5)
+            buyPrice = market.price(asset, otherasset, minsAgo=1)
 
-            buyLevel1 = buyPrice * _d(0.995)
-            buyLevel2 = buyPrice * _d(0.99)
-            buyLevel3 = buyPrice * _d(0.985)
+            buyLevel1 = buyPrice * _d(0.95)
+            buyLevel2 = buyPrice * _d(0.90)
+            buyLevel3 = buyPrice * _d(0.85)
 
             buySpend1 = baseBalance * _d(0.20)	# How much to spend at buyLevel1 price.
             buySpend2 = baseBalance * _d(0.30)	# How much to spend at buyLevel2 price.
             buySpend3 = baseBalance * _d(0.50)	# How much to spend at buyLevel3 price.
 
-            sellLevel = buyPrice * _d(1.005)
+            sellLevel = buyPrice * _d(1.05)
 
             sellLevel = round(sellLevel, 10)
             print colored('Waiting to buy at', "blue"), buyLevel1, buyLevel2, buyLevel3
 
             time.sleep(3)
             currentPrice = market.price(asset, otherasset)
-            print symbol, '=', currentPrice, '   (', currentPrice / buyPrice, ' since 5 mins ago)'
+            print symbol, '=', currentPrice, '   (', currentPrice / buyPrice, ' since 1 minute ago)'
             print 'Open buys:', openBuys
 
             for buyLevel, buyPrice in openBuys.items():
