@@ -7,6 +7,7 @@
 
 import gevent.local
 import sys
+import termcolor
 
 from binance.client import Client
 from apikeys import api_key, api_secret
