@@ -6,7 +6,7 @@
 
 import os
 import sys
-sys.path.append(r'c:\pyTrades')
+sys.path.append(r'c:\')
 
 import math
 import time
