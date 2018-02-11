@@ -1,14 +1,13 @@
-"""
-  Utilities for dealing with market data.
-
-  Examples:
-    Get current price -
-        >>> market.price('BNB', 'USDT')
-
-    Retrieve a historical price -
-        >>> market.price('BNB', 'USDT', minsAgo=5)
-
-"""
+#
+# Utilities for dealing with market data.
+#
+#  Example use:
+#    Get current price -
+#        >>> market.price('BNB', 'USDT')
+#
+#    Retrieve a historical price -
+#        >>> market.price('BNB', 'USDT', minsAgo=5)
+#
 
 import bintrees
 import decimal
@@ -30,14 +29,14 @@ class PriceMemo(object):
             try:
                 floorKey = self.tree.floor_key(when)
                 ceilKey = self.tree.ceiling_key(when)
-                
+
                 # Linear interpolation if time requested is between two
                 # data points.
-                ceilFrac = decimal.Decimal((when - floorKey).total_seconds() / 
+                ceilFrac = decimal.Decimal((when - floorKey).total_seconds() /
                                             (ceilKey - floorKey).total_seconds())
                 floorFrac = 1 - ceilFrac
 
-                return (self.tree[floorKey] * floorFrac + 
+                return (self.tree[floorKey] * floorFrac +
                         self.tree[ceilKey] * ceilFrac)
 
             except KeyError:
@@ -46,6 +45,13 @@ class PriceMemo(object):
     def hasPriceAt(self, when):
         return self.getPriceAt(when) is not None
 
+    def getLatestPrice(self):
+        when, price = self.tree.max_item()
+        return price, when
+
+    def isEmpty(self):
+        return len(self.tree) == 0
+
     def add(self, when, price):
         self.tree[when] = price
 
@@ -53,8 +59,10 @@ class PriceMemo(object):
 # Map from (asset, quoteAsset) to PriceMemo
 assetMemos = {}
 
-def getMemo(asset, quoteAsset, create=False):
-    key = (asset, quoteAsset)
+def getMemo(asset, quoteAsset=None, create=False):
+    key = asset
+    if quoteAsset:
+        key = key + quoteAsset
     if key in assetMemos:
         return assetMemos[key]
     elif create:
@@ -77,15 +85,24 @@ def price(asset, quoteAsset, daysAgo=0, hoursAgo=0, minsAgo=0, secsAgo=0):
     assetTime = datetime.datetime.now() - timeAgo
 
     if not timeAgo:
-        # Get current price.
-        currentPrice = client.get_ticker(symbol=symbol)
-        currentPrice = decimal.Decimal(currentPrice['lastPrice'])
-        assetMemo.add(datetime.datetime.now(), currentPrice)
-        return currentPrice
+        while True:
+            if not assetMemo.isEmpty():
+                price, whenPrice = assetMemo.getLatestPrice()
+                agePrice = datetime.datetime.now() - whenPrice
+                if agePrice.total_seconds() <= 5:
+                    # Last known data is fresh enough.
+                    return price
+
+            # Wait for the stream bot to give us our data.
+            time.sleep(1)
+
     else:
         # Check if we have this data in memo.
         fromId = None
         while not assetMemo.hasPriceAt(assetTime):
+
+            # If not, page back through the history on the server until we
+            # find it.
             trades = client.get_historical_trades(symbol=symbol, limit=500,
                                                   fromId=fromId)
             if not trades:
