@@ -6,7 +6,11 @@
 
 import os
 import sys
+<<<<<<< HEAD
 sys.path.append(r'c:\')
+=======
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+>>>>>>> 2bdb76476511d6dbe1193fda73c3359705eb2524
 
 import math
 import time
@@ -16,7 +20,6 @@ import gevent.monkey
 gevent.monkey.patch_all()
 
 from decimal import Decimal as _d
-from binance.client import Client
 from termcolor import colored
 
 from pyTrades.util import binance_api

@@ -1,4 +1,5 @@
 apikeys.py*
 *~
 *.pyc
+*.pyo
 dbdump

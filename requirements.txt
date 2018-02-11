@@ -3,4 +3,3 @@ gevent
 filelike
 ws4py
 termcolor
-ujson

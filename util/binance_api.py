@@ -7,6 +7,7 @@
 
 import gevent.local
 import sys
+import termcolor
 
 from binance.client import Client
 from apikeys import api_key, api_secret
@@ -27,14 +28,15 @@ class ProxyClient(object):
         if hasattr(self._local.baseClient, attr):
             return (lambda *args, **kw:
                 self._perform(attr,
-                    lambda: getattr(self._local.baseClient, attr)(*args, **kw)))
+                    lambda: getattr(self._local.baseClient, attr)(*args, **kw), args, kw))
         raise AttributeError(attr)
 
-    def _perform(self, funcName, func):
+    def _perform(self, funcName, func, args, kw):
         try:
             result = func()
         except Exception, e:
             print termcolor.colored('EXCEPTION %s' % e, 'red')
+            print 'when calling', funcName, args, kw
             if e.code in (-1003, -1015, -1016):
                 sys.exit(1)
             raise e

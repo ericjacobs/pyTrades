@@ -8,33 +8,38 @@
 import datetime
 import decimal
 import gevent
-import ujson
 import termcolor
+import time
 
 from ws4py.client import geventclient
 
 from pyTrades.util import market
+from pyTrades.util import json
 
 
 def streamBot():
-    print termcolor.colored('Connecting to WebSocket', 'blue')
-
-    ws = geventclient.WebSocketClient('wss://stream.binance.com:9443/ws/!ticker@arr')
-    ws.connect()
-
     while True:
-        m = ws.receive()
-        if m is not None:
-            symbolList = []
+        print termcolor.colored('Connecting to WebSocket', 'blue')
 
-            for symbol in ujson.loads(m.data):
-                symbolName, curPrice = symbol['s'].upper(), symbol['c']
-                symbolList.append(symbolName)
+        ws = geventclient.WebSocketClient('wss://stream.binance.com:9443/ws/!ticker@arr')
+        ws.connect()
 
-                market.getMemo(symbolName, create=True).add(
-                    datetime.datetime.now(),
-                    decimal.Decimal(curPrice))
+        while True:
+            m = ws.receive()
+            if m is not None:
+                symbolList = []
 
-            print 'Received stream data (%d assets)' % len(symbolList)
-        else:
-            break
+                for symbol in json.loads(m.data):
+                    symbolName, curPrice = symbol['s'].upper(), symbol['c']
+                    symbolList.append(symbolName)
+
+                    market.getMemo(symbolName, create=True).add(
+                        datetime.datetime.now(),
+                        decimal.Decimal(curPrice))
+
+                print 'Received stream data (%d assets)' % len(symbolList)
+            else:
+                print termcolor.colored('WebSocket hit end-of-stream. Waiting 10 seconds and reconnecting', 'red')
+                ws.close()
+                time.sleep(10)
+                break

@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 1.5em;
+        }
+
+        h2 {
+            font-size: 1.3em;
+        }
+
+        .highlight {
+            max-width: 50em;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            background-color: #eee;
+            white-space: pre-wrap;
+            height: 100vh;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+
+        .highlight pre {
+            margin: 0;
+        }
+
+        .hll { background-color: #ffffcc }
+.c { color: #408080; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.cp { color: #BC7A00 } /* Comment.Preproc */
+.cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #408080; font-style: italic } /* Comment.Single */
+.cs { color: #408080; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.gr { color: #FF0000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #00A000 } /* Generic.Inserted */
+.go { color: #888888 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #7D9029 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #999999; font-weight: bold } /* Name.Entity */
+.ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #A0A000 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #BB6688 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+
+        .annotation-comment {
+            display: block;
+            background-color: #FEFAAD;
+            white-space: normal;
+            padding: 5px 10px;
+            margin: 5px -10px;
+        }
+
+        .annotation-comment .document > * {
+            margin: 0;
+        }
+
+        .annotation-comment .document > * + * {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="highlight"><pre><span></span><a name="line-1"></a><span class="gd">-</span>
+<a name="line-2"></a><span class="gh">diff --git a/pyTrader.py b/pyTrader.py</span>
+<a name="line-3"></a><span class="gh">index 491d8ed..87839dc 100644</span>
+<a name="line-4"></a><span class="gd">--- a/pyTrader.py</span>
+<a name="line-5"></a><span class="gi">+++ b/pyTrader.py</span>
+<a name="line-6"></a><span class="gu">@@ -1,136 +1,39 @@</span>
+<a name="line-7"></a> 
+<a name="line-8"></a><span class="gi">+#</span>
+<a name="line-9"></a><span class="gi">+# Main entry point for pyTrader.</span>
+<a name="line-10"></a><span class="gi">+#</span>
+<a name="line-11"></a><span class="gi">+</span>
+<a name="line-12"></a><span class="gi">+</span>
+<a name="line-13"></a><span class="gi">+import os</span>
+<a name="line-14"></a> import sys
+<a name="line-15"></a><span class="gi">+sys.path.append(os.path.realpath(&#39;..&#39;))</span>
+<a name="line-16"></a><span class="gi">+</span>
+<a name="line-17"></a> import math
+<a name="line-18"></a> import time
+<a name="line-19"></a><span class="gi">+import gevent</span>
+<a name="line-20"></a><span class="gi">+import gevent.monkey</span>
+<a name="line-21"></a><span class="gi">+</span>
+<a name="line-22"></a><span class="gi">+gevent.monkey.patch_all()</span>
+<a name="line-23"></a> 
+<a name="line-24"></a> from decimal import Decimal as _d
+<a name="line-25"></a> from binance.client import Client
+<a name="line-26"></a> from termcolor import colored
+<a name="line-27"></a>
+<a name="line-28"></a>
+<a name="line-29"></a><div class="annotation-comment"><div class="document">
+<p>Adding the gevent library which implements an event hub for cooperative multitasking.
+This allows us to run an indefinite number of bots in the same process.</p>
+</div>
+</div><a name="line-30"></a>
+<a name="line-31"></a><div class="annotation-comment"><div class="document">
+<p>All other code here is moved to strat1.</p>
+</div>
+</div><a name="line-32"></a>
+<a name="line-33"></a><span class="gi">+from pyTrades.util import binance_api</span>
+<a name="line-34"></a><span class="gi">+from pyTrades.util import binance_ws</span>
+<a name="line-35"></a><span class="gi">+from pyTrades.util import task</span>
+<a name="line-36"></a>
+<a name="line-37"></a><span class="gi">+# Start a bot that will pull in current prices from the Binance</span>
+<a name="line-38"></a><span class="gi">+# WebSocket stream.</span>
+<a name="line-39"></a><span class="gi">+task.TaskGreenlet(binance_ws.streamBot, name=&#39;streamBot&#39;).start()</span>
+<a name="line-40"></a>
+<a name="line-41"></a><div class="annotation-comment"><div class="document">
+<p>This is where we start utility bots.</p>
+</div>
+</div><a name="line-42"></a>
+<a name="line-43"></a> 
+<a name="line-44"></a><span class="gi">+# Start trading bots.</span>
+<a name="line-45"></a><span class="gi">+from pyTrades.strats.strat1 import Strategy1</span>
+<a name="line-46"></a> 
+<a name="line-47"></a><span class="gi">+# Add other trading bots here...</span>
+<a name="line-48"></a><span class="gi">+#from pyTrades.strats.strat1 import Strategy1</span>
+<a name="line-49"></a>
+<a name="line-50"></a><div class="annotation-comment"><div class="document">
+<p>This is where we start the trading bots.</p>
+</div>
+</div><a name="line-51"></a> 
+<a name="line-52"></a><span class="gd">-strat = Strategy()</span>
+<a name="line-53"></a><span class="gd">-strat.trades()</span>
+<a name="line-54"></a><span class="gi">+# Main loop.</span>
+<a name="line-55"></a><span class="gi">+gevent.wait()</span>
+<a name="line-56"></a>
+<a name="line-57"></a><span class="gh">diff --git a/strats/__init__.py b/strats/__init__.py</span>
+<a name="line-58"></a>new file mode 100644
+<a name="line-59"></a><span class="gh">index 0000000..e69de29</span>
+<a name="line-60"></a><span class="gh">diff --git a/strats/abstract.py b/strats/abstract.py</span>
+<a name="line-61"></a>new file mode 100644
+<a name="line-62"></a><span class="gh">index 0000000..05b609a</span>
+<a name="line-63"></a><span class="gd">--- /dev/null</span>
+<a name="line-64"></a><span class="gi">+++ b/strats/abstract.py</span>
+<a name="line-65"></a><span class="gu">@@ -0,0 +1,21 @@</span>
+<a name="line-66"></a><span class="gi">+</span>
+<a name="line-67"></a><span class="gi">+#</span>
+<a name="line-68"></a><span class="gi">+# Abstract definition of a trading strategy.</span>
+<a name="line-69"></a><span class="gi">+#</span>
+<a name="line-70"></a><span class="gi">+</span>
+<a name="line-71"></a><span class="gi">+from pyTrades.util import task</span>
+<a name="line-72"></a><span class="gi">+</span>
+<a name="line-73"></a><span class="gi">+</span>
+<a name="line-74"></a><span class="gi">+class AbstractStrategy(object):</span>
+<a name="line-75"></a><span class="gi">+</span>
+<a name="line-76"></a><span class="gi">+    # Change this to change the asset you&#39;re buying</span>
+<a name="line-77"></a><span class="gi">+    asset = None</span>
+<a name="line-78"></a><span class="gi">+</span>
+<a name="line-79"></a><span class="gi">+    # Change this to change the asset you&#39;re paying with</span>
+<a name="line-80"></a><span class="gi">+    otherasset = None</span>
+<a name="line-81"></a><span class="gi">+</span>
+<a name="line-82"></a><span class="gi">+    def start(self):</span>
+<a name="line-83"></a><span class="gi">+        &quot;&quot;&quot;Start this trading bot.&quot;&quot;&quot;</span>
+<a name="line-84"></a><span class="gi">+        task.TaskGreenlet(self.trades,</span>
+<a name="line-85"></a><span class="gi">+                          name=&#39;%s%s Bot&#39; % (self.asset, self.otherasset)</span>
+<a name="line-86"></a><span class="gi">+        ).start()</span>
+<a name="line-87"></a>
+<a name="line-88"></a><div class="annotation-comment"><div class="document">
+<p>This is the &quot;abstract base class&quot; for strategies, which the strategies will inherit from.</p>
+</div>
+</div><a name="line-89"></a>
+<a name="line-90"></a>
+<a name="line-91"></a><span class="gh">diff --git a/strats/strat1.py b/strats/strat1.py</span>
+<a name="line-92"></a>new file mode 100644
+<a name="line-93"></a><span class="gh">index 0000000..2cb11f8</span>
+<a name="line-94"></a><span class="gd">--- /dev/null</span>
+<a name="line-95"></a><span class="gi">+++ b/strats/strat1.py</span>
+<a name="line-96"></a><span class="gu">@@ -0,0 +1,273 @@</span>
+<a name="line-97"></a><span class="gi">+</span>
+<a name="line-98"></a><span class="gi">+#</span>
+<a name="line-99"></a><span class="gi">+# Basic trading strategy impementation.</span>
+<a name="line-100"></a><span class="gi">+#</span>
+<a name="line-101"></a><span class="gi">+</span>
+<a name="line-102"></a><span class="gi">+</span>
+<a name="line-103"></a><span class="gi">+import sys</span>
+<a name="line-104"></a><span class="gi">+import math</span>
+<a name="line-105"></a><span class="gi">+import random</span>
+<a name="line-106"></a><span class="gi">+import time</span>
+<a name="line-107"></a><span class="gi">+</span>
+<a name="line-108"></a><span class="gi">+from decimal import Decimal as _d</span>
+<a name="line-109"></a><span class="gi">+from binance.client import Client</span>
+<a name="line-110"></a><span class="gi">+from termcolor import colored</span>
+<a name="line-111"></a><span class="gi">+</span>
+<a name="line-112"></a><span class="gi">+from pyTrades.util.binance_api import client</span>
+<a name="line-113"></a><span class="gi">+from pyTrades.util import market</span>
+<a name="line-114"></a><span class="gi">+from pyTrades.strats import abstract</span>
+<a name="line-115"></a><span class="gi">+</span>
+<a name="line-116"></a><span class="gi">+</span>
+<a name="line-117"></a><span class="gi">+class Strategy1(abstract.AbstractStrategy):</span>
+<a name="line-118"></a><span class="gi">+</span>
+<a name="line-119"></a><span class="gi">+    # Asset will be set in the loop at the end of this file.</span>
+<a name="line-120"></a><span class="gi">+    asset = None</span>
+<a name="line-121"></a><span class="gi">+</span>
+<a name="line-122"></a><span class="gi">+    # Change this to change the asset you&#39;re paying with</span>
+<a name="line-123"></a><span class="gi">+    otherasset = &#39;BTC&#39;</span>
+<a name="line-124"></a>
+<a name="line-125"></a><div class="annotation-comment"><div class="document">
+<p>This is similar to the former pyTrades.py code. One difference here is that
+asset is defined at the class level, but is set to None. This is because
+it will be set to different assets (see at the end of this file.)</p>
+</div>
+</div><a name="line-126"></a>
+<a name="line-127"></a><span class="gi">+    def trades(self):</span>
+<a name="line-128"></a><span class="gi">+        asset = self.asset</span>
+<a name="line-129"></a><span class="gi">+        otherasset = self.otherasset</span>
+<a name="line-130"></a><span class="gi">+</span>
+<a name="line-131"></a><span class="gi">+        # Calculate pair you&#39;re trading</span>
+<a name="line-132"></a><span class="gi">+        symbol = asset + otherasset</span>
+<a name="line-133"></a><span class="gi">+</span>
+<a name="line-134"></a><span class="gi">+        print colored(&#39;Initializing&#39;, &quot;cyan&quot;)</span>
+<a name="line-135"></a><span class="gi">+</span>
+<a name="line-136"></a><span class="gi">+        # Do a random wait to avoid slamming the server on startup.</span>
+<a name="line-137"></a><span class="gi">+        time.sleep(random.randrange(0, 200))</span>
+<a name="line-138"></a>
+<a name="line-139"></a><div class="annotation-comment"><div class="document">
+<p>A few random waits are inserted between API calls in the startup to avoid flooding the API.</p>
+</div>
+</div><a name="line-140"></a>
+<a name="line-141"></a><span class="gi">+        balance= (client.get_asset_balance(asset))</span>
+<a name="line-142"></a><span class="gi">+        balance = float(balance[&#39;free&#39;])</span>
+<a name="line-143"></a><span class="gi">+        startBalance=(client.get_asset_balance(asset))</span>
+<a name="line-144"></a><span class="gi">+        startBalance= float(startBalance[&#39;free&#39;])</span>
+<a name="line-145"></a><span class="gi">+        #lastPrice = float(Orders.get_ticker(symbol)[&#39;lastPrice&#39;])</span>
+<a name="line-146"></a><span class="gi">+        currentPrice = client.get_ticker(symbol =symbol)</span>
+<a name="line-147"></a><span class="gi">+        currentPrice=float(currentPrice[&#39;lastPrice&#39;])</span>
+<a name="line-148"></a><span class="gi">+</span>
+<a name="line-149"></a><span class="gi">+        # Do a random wait to avoid slamming the server on startup.</span>
+<a name="line-150"></a><span class="gi">+        time.sleep(random.randrange(2, 200))</span>
+<a name="line-151"></a><span class="gi">+</span>
+<a name="line-152"></a><span class="gi">+        print colored(&#39;Initializing - step 2&#39;, &quot;cyan&quot;)</span>
+<a name="line-153"></a><span class="gi">+</span>
+<a name="line-154"></a><span class="gi">+        # Get the min and max quantity for trading under this symbol.</span>
+<a name="line-155"></a><span class="gi">+        symbolInfo = client.get_symbol_info(symbol)</span>
+<a name="line-156"></a><span class="gi">+        symbolFilters = {filt[&#39;filterType&#39;]: filt</span>
+<a name="line-157"></a><span class="gi">+                             for filt in symbolInfo[&#39;filters&#39;]}</span>
+<a name="line-158"></a><span class="gi">+        lotSizeFilter = symbolFilters.get(&#39;LOT_SIZE&#39;, {})</span>
+<a name="line-159"></a><span class="gi">+        lotSizeMinQty = float(lotSizeFilter.get(&#39;minQty&#39;, 0.0))</span>
+<a name="line-160"></a><span class="gi">+        lotSizeMaxQty = float(lotSizeFilter.get(&#39;maxQty&#39;, 0.0))</span>
+<a name="line-161"></a><span class="gi">+        lotSizeStep = float(lotSizeFilter.get(&#39;stepSize&#39;, 0.0))</span>
+<a name="line-162"></a><span class="gi">+</span>
+<a name="line-163"></a><span class="gi">+        # This is the number of digits we should round to in order</span>
+<a name="line-164"></a><span class="gi">+        # to conform to the lot&#39;s stepSize restriction.</span>
+<a name="line-165"></a><span class="gi">+        lotSizeStepNumDigits = int(round(-math.log(lotSizeStep, 10)))</span>
+<a name="line-166"></a><span class="gi">+</span>
+<a name="line-167"></a><span class="gi">+        # Do a random wait to avoid slamming the server on startup.</span>
+<a name="line-168"></a><span class="gi">+        time.sleep(random.randrange(2, 200))</span>
+<a name="line-169"></a><span class="gi">+</span>
+<a name="line-170"></a><span class="gi">+        print colored(&#39;Initializing - step 3&#39;, &quot;cyan&quot;)</span>
+<a name="line-171"></a><span class="gi">+</span>
+<a name="line-172"></a><span class="gi">+        numberOfBuys = 0</span>
+<a name="line-173"></a><span class="gi">+        otherbalance = (client.get_asset_balance(otherasset))</span>
+<a name="line-174"></a><span class="gi">+        otherbalance = _d(otherbalance[&#39;free&#39;])</span>
+<a name="line-175"></a><span class="gi">+</span>
+<a name="line-176"></a><span class="gi">+        # How much of otherasset (e.g. BTC) we want to work with, expressed as</span>
+<a name="line-177"></a><span class="gi">+        # fraction of the current balance of otherasset.</span>
+<a name="line-178"></a><span class="gi">+        baseBalanceFraction = _d(0.7)       # 20% of current balance</span>
+<a name="line-179"></a><span class="gi">+        baseBalance = otherbalance * baseBalanceFraction</span>
+<a name="line-180"></a><span class="gi">+</span>
+<a name="line-181"></a><span class="gi">+        cycle = 0</span>
+<a name="line-182"></a><span class="gi">+        actions = []</span>
+<a name="line-183"></a><span class="gi">+        openBuys = {}</span>
+<a name="line-184"></a><span class="gi">+</span>
+<a name="line-185"></a><span class="gi">+        print colored(&#39;Auto Trading with binance&#39;, &quot;cyan&quot;)</span>
+<a name="line-186"></a><span class="gi">+        print &#39;Trading with&#39;, baseBalance, &#39;of&#39;, otherasset</span>
+<a name="line-187"></a><span class="gi">+</span>
+<a name="line-188"></a><span class="gi">+        while True:</span>
+<a name="line-189"></a><span class="gi">+            buyPrice = market.price(asset, otherasset, minsAgo=1)</span>
+<a name="line-190"></a><span class="gi">+</span>
+<a name="line-191"></a><span class="gi">+            buyLevel1 = buyPrice * _d(0.95)</span>
+<a name="line-192"></a><span class="gi">+            buyLevel2 = buyPrice * _d(0.90)</span>
+<a name="line-193"></a><span class="gi">+            buyLevel3 = buyPrice * _d(0.85)</span>
+<a name="line-194"></a><span class="gi">+</span>
+<a name="line-195"></a><span class="gi">+            buySpend1 = baseBalance * _d(0.20)	# How much to spend at buyLevel1 price.</span>
+<a name="line-196"></a><span class="gi">+            buySpend2 = baseBalance * _d(0.30)	# How much to spend at buyLevel2 price.</span>
+<a name="line-197"></a><span class="gi">+            buySpend3 = baseBalance * _d(0.50)	# How much to spend at buyLevel3 price.</span>
+<a name="line-198"></a><span class="gi">+</span>
+<a name="line-199"></a><span class="gi">+            sellLevel = buyPrice * _d(1.05)</span>
+<a name="line-200"></a><span class="gi">+</span>
+<a name="line-201"></a><span class="gi">+            sellLevel = round(sellLevel, 10)</span>
+<a name="line-202"></a><span class="gi">+            print colored(&#39;Waiting to buy at&#39;, &quot;blue&quot;), buyLevel1, buyLevel2, buyLevel3</span>
+<a name="line-203"></a><span class="gi">+</span>
+<a name="line-204"></a><span class="gi">+            time.sleep(3)</span>
+<a name="line-205"></a><span class="gi">+            currentPrice = market.price(asset, otherasset)</span>
+<a name="line-206"></a><span class="gi">+            print symbol, &#39;=&#39;, currentPrice, &#39;   (&#39;, currentPrice / buyPrice, &#39; since 1 minute ago)&#39;</span>
+<a name="line-207"></a><span class="gi">+            print &#39;Open buys:&#39;, openBuys</span>
+<a name="line-208"></a><span class="gi">+</span>
+<a name="line-209"></a><span class="gi">+            for buyLevel, buyPrice in openBuys.items():</span>
+<a name="line-210"></a><span class="gi">+                if buyPrice &gt; 0 and currentPrice &gt;= buyPrice:</span>
+<a name="line-211"></a><span class="gi">+                    print &#39;Cleared buyLevel&#39;, buyLevel</span>
+<a name="line-212"></a><span class="gi">+                    openBuys[buyLevel] = 0</span>
+<a name="line-213"></a><span class="gi">+</span>
+<a name="line-214"></a><span class="gi">+            wantQty = 0</span>
+<a name="line-215"></a><span class="gi">+            if currentPrice &lt;= buyLevel3 and not openBuys.get(3):</span>
+<a name="line-216"></a><span class="gi">+                wantQty = buySpend3 / currentPrice</span>
+<a name="line-217"></a><span class="gi">+                print &#39;Hit buyLevel3&#39;, wantQty, asset</span>
+<a name="line-218"></a><span class="gi">+                buyLevel = 3</span>
+<a name="line-219"></a><span class="gi">+</span>
+<a name="line-220"></a><span class="gi">+            elif currentPrice &lt;= buyLevel2 and not openBuys.get(2):</span>
+<a name="line-221"></a><span class="gi">+                wantQty = buySpend2 / currentPrice</span>
+<a name="line-222"></a><span class="gi">+                print &#39;Hit buyLevel2&#39;, wantQty, asset</span>
+<a name="line-223"></a><span class="gi">+                buyLevel = 2</span>
+<a name="line-224"></a><span class="gi">+</span>
+<a name="line-225"></a><span class="gi">+            elif currentPrice &lt;= buyLevel1 and not openBuys.get(1):</span>
+<a name="line-226"></a><span class="gi">+                wantQty = buySpend1 / currentPrice</span>
+<a name="line-227"></a><span class="gi">+                print &#39;Hit buyLevel1&#39;, wantQty, asset</span>
+<a name="line-228"></a><span class="gi">+                buyLevel = 1</span>
+<a name="line-229"></a><span class="gi">+</span>
+<a name="line-230"></a><span class="gi">+            if wantQty:</span>
+<a name="line-231"></a><span class="gi">+                qty = round(_d(wantQty), lotSizeStepNumDigits)</span>
+<a name="line-232"></a><span class="gi">+                print &#39;Buying&#39;, qty, &#39;of&#39;, asset, &#39;to sell for&#39;, sellLevel</span>
+<a name="line-233"></a><span class="gi">+</span>
+<a name="line-234"></a><span class="gi">+                order = client.create_order(</span>
+<a name="line-235"></a><span class="gi">+                    symbol=symbol,</span>
+<a name="line-236"></a><span class="gi">+                    side=Client.SIDE_BUY,</span>
+<a name="line-237"></a><span class="gi">+                    type=Client.ORDER_TYPE_MARKET,</span>
+<a name="line-238"></a><span class="gi">+                    quantity=float(qty)</span>
+<a name="line-239"></a><span class="gi">+                )</span>
+<a name="line-240"></a><span class="gi">+</span>
+<a name="line-241"></a><span class="gi">+                print colored(&#39;Will sell at&#39;, &quot;blue&quot;), &#39;{0:f}&#39;.format(sellLevel)</span>
+<a name="line-242"></a><span class="gi">+                time.sleep(5)</span>
+<a name="line-243"></a><span class="gi">+</span>
+<a name="line-244"></a><span class="gi">+                order = client.create_order(</span>
+<a name="line-245"></a><span class="gi">+                    symbol=symbol,</span>
+<a name="line-246"></a><span class="gi">+                    side=Client.SIDE_SELL,</span>
+<a name="line-247"></a><span class="gi">+                    type=Client.ORDER_TYPE_LIMIT,</span>
+<a name="line-248"></a><span class="gi">+                    timeInForce=&#39;GTC&#39;,</span>
+<a name="line-249"></a><span class="gi">+                    price=&#39;{0:f}&#39;.format(sellLevel),</span>
+<a name="line-250"></a><span class="gi">+                    quantity=&#39;{0:f}&#39;.format(qty)</span>
+<a name="line-251"></a><span class="gi">+                )</span>
+<a name="line-252"></a><span class="gi">+</span>
+<a name="line-253"></a><span class="gi">+                openBuys[buyLevel] = sellLevel</span>
+<a name="line-254"></a><span class="gi">+</span>
+<a name="line-255"></a><span class="gi">+                balance = (client.get_asset_balance(asset))</span>
+<a name="line-256"></a><span class="gi">+                balance = float(balance[&#39;free&#39;])</span>
+<a name="line-257"></a><span class="gi">+                otherbalance = (client.get_asset_balance(otherasset))</span>
+<a name="line-258"></a><span class="gi">+                otherbalance = float(otherbalance[&#39;free&#39;])</span>
+<a name="line-259"></a><span class="gi">+</span>
+<a name="line-260"></a><span class="gi">+</span>
+<a name="line-261"></a><span class="gi">+for asset in [&#39;ADA&#39;,</span>
+<a name="line-262"></a><span class="gi">+         &#39;ADX&#39;,</span>
+<a name="line-263"></a><span class="gi">+         &#39;AE&#39;,</span>
+<a name="line-264"></a><span class="gi">+         &#39;AION&#39;,</span>
+<a name="line-265"></a><span class="gi">+         &#39;AMB&#39;,</span>
+<a name="line-266"></a><span class="gi">+         &#39;APPC&#39;,</span>
+<a name="line-267"></a><span class="gi">+         &#39;ARK&#39;,</span>
+<a name="line-268"></a><span class="gi">+         &#39;ARN&#39;,</span>
+<a name="line-269"></a><span class="gi">+         &#39;AST&#39;,</span>
+<a name="line-270"></a><span class="gi">+         &#39;BAT&#39;,</span>
+<a name="line-271"></a><span class="gi">+         &#39;BCC&#39;,</span>
+<a name="line-272"></a><span class="gi">+         &#39;BCD&#39;,</span>
+<a name="line-273"></a><span class="gi">+         &#39;BCPT&#39;,</span>
+<a name="line-274"></a><span class="gi">+         &#39;BLZ&#39;,</span>
+<a name="line-275"></a><span class="gi">+         &#39;BNB&#39;,</span>
+<a name="line-276"></a><span class="gi">+         &#39;BNT&#39;,</span>
+<a name="line-277"></a><span class="gi">+         &#39;BQX&#39;,</span>
+<a name="line-278"></a><span class="gi">+         &#39;BRD&#39;,</span>
+<a name="line-279"></a><span class="gi">+         &#39;BTG&#39;,</span>
+<a name="line-280"></a><span class="gi">+         &#39;BTS&#39;,</span>
+<a name="line-281"></a><span class="gi">+         &#39;CDT&#39;,</span>
+<a name="line-282"></a><span class="gi">+         &#39;CHAT&#39;,</span>
+<a name="line-283"></a><span class="gi">+         &#39;CMT&#39;,</span>
+<a name="line-284"></a><span class="gi">+         &#39;CND&#39;,</span>
+<a name="line-285"></a><span class="gi">+         &#39;CTR&#39;,</span>
+<a name="line-286"></a><span class="gi">+         &#39;DASH&#39;,</span>
+<a name="line-287"></a><span class="gi">+         &#39;DGD&#39;,</span>
+<a name="line-288"></a><span class="gi">+         &#39;DLT&#39;,</span>
+<a name="line-289"></a><span class="gi">+         &#39;DNT&#39;,</span>
+<a name="line-290"></a><span class="gi">+         &#39;EDO&#39;,</span>
+<a name="line-291"></a><span class="gi">+         &#39;ELF&#39;,</span>
+<a name="line-292"></a><span class="gi">+         &#39;ENG&#39;,</span>
+<a name="line-293"></a><span class="gi">+         &#39;ENJ&#39;,</span>
+<a name="line-294"></a><span class="gi">+         &#39;EOS&#39;,</span>
+<a name="line-295"></a><span class="gi">+         &#39;ETC&#39;,</span>
+<a name="line-296"></a><span class="gi">+         &#39;ETH&#39;,</span>
+<a name="line-297"></a><span class="gi">+         &#39;EVX&#39;,</span>
+<a name="line-298"></a><span class="gi">+         &#39;FUEL&#39;,</span>
+<a name="line-299"></a><span class="gi">+         &#39;FUN&#39;,</span>
+<a name="line-300"></a><span class="gi">+         &#39;GAS&#39;,</span>
+<a name="line-301"></a><span class="gi">+         &#39;GTO&#39;,</span>
+<a name="line-302"></a><span class="gi">+         &#39;GVT&#39;,</span>
+<a name="line-303"></a><span class="gi">+         &#39;GXS&#39;,</span>
+<a name="line-304"></a><span class="gi">+         &#39;HSR&#39;,</span>
+<a name="line-305"></a><span class="gi">+         &#39;ICN&#39;,</span>
+<a name="line-306"></a><span class="gi">+         &#39;ICX&#39;,</span>
+<a name="line-307"></a><span class="gi">+         &#39;INS&#39;,</span>
+<a name="line-308"></a><span class="gi">+         &#39;IOST&#39;,</span>
+<a name="line-309"></a><span class="gi">+         &#39;IOTA&#39;,</span>
+<a name="line-310"></a><span class="gi">+         &#39;KMD&#39;,</span>
+<a name="line-311"></a><span class="gi">+         &#39;KNC&#39;,</span>
+<a name="line-312"></a><span class="gi">+         &#39;LEND&#39;,</span>
+<a name="line-313"></a><span class="gi">+         &#39;LINK&#39;,</span>
+<a name="line-314"></a><span class="gi">+         &#39;LRC&#39;,</span>
+<a name="line-315"></a><span class="gi">+         &#39;LSK&#39;,</span>
+<a name="line-316"></a><span class="gi">+         &#39;LTC&#39;,</span>
+<a name="line-317"></a><span class="gi">+         &#39;LUN&#39;,</span>
+<a name="line-318"></a><span class="gi">+         &#39;MANA&#39;,</span>
+<a name="line-319"></a><span class="gi">+         &#39;MCO&#39;,</span>
+<a name="line-320"></a><span class="gi">+         &#39;MDA&#39;,</span>
+<a name="line-321"></a><span class="gi">+         &#39;MOD&#39;,</span>
+<a name="line-322"></a><span class="gi">+         &#39;MTH&#39;,</span>
+<a name="line-323"></a><span class="gi">+         &#39;MTL&#39;,</span>
+<a name="line-324"></a><span class="gi">+         &#39;NANO&#39;,</span>
+<a name="line-325"></a><span class="gi">+         &#39;NAV&#39;,</span>
+<a name="line-326"></a><span class="gi">+         &#39;NEBL&#39;,</span>
+<a name="line-327"></a><span class="gi">+         &#39;NEO&#39;,</span>
+<a name="line-328"></a><span class="gi">+         &#39;NULS&#39;,</span>
+<a name="line-329"></a><span class="gi">+         &#39;OAX&#39;,</span>
+<a name="line-330"></a><span class="gi">+         &#39;OMG&#39;,</span>
+<a name="line-331"></a><span class="gi">+         &#39;OST&#39;,</span>
+<a name="line-332"></a><span class="gi">+         &#39;PIVX&#39;,</span>
+<a name="line-333"></a><span class="gi">+         &#39;POE&#39;,</span>
+<a name="line-334"></a><span class="gi">+         &#39;POWR&#39;,</span>
+<a name="line-335"></a><span class="gi">+         &#39;PPT&#39;,</span>
+<a name="line-336"></a><span class="gi">+         &#39;QSP&#39;,</span>
+<a name="line-337"></a><span class="gi">+         &#39;QTUM&#39;,</span>
+<a name="line-338"></a><span class="gi">+         &#39;RCN&#39;,</span>
+<a name="line-339"></a><span class="gi">+         &#39;RDN&#39;,</span>
+<a name="line-340"></a><span class="gi">+         &#39;REQ&#39;,</span>
+<a name="line-341"></a><span class="gi">+         &#39;RLC&#39;,</span>
+<a name="line-342"></a><span class="gi">+         &#39;SALT&#39;,</span>
+<a name="line-343"></a><span class="gi">+         &#39;SNGLS&#39;,</span>
+<a name="line-344"></a><span class="gi">+         &#39;SNM&#39;,</span>
+<a name="line-345"></a><span class="gi">+         &#39;SNT&#39;,</span>
+<a name="line-346"></a><span class="gi">+         &#39;STEEM&#39;,</span>
+<a name="line-347"></a><span class="gi">+         &#39;STORJ&#39;,</span>
+<a name="line-348"></a><span class="gi">+         &#39;STRAT&#39;,</span>
+<a name="line-349"></a><span class="gi">+         &#39;SUB&#39;,</span>
+<a name="line-350"></a><span class="gi">+         &#39;TNB&#39;,</span>
+<a name="line-351"></a><span class="gi">+         &#39;TNT&#39;,</span>
+<a name="line-352"></a><span class="gi">+         &#39;TRIG&#39;,</span>
+<a name="line-353"></a><span class="gi">+         &#39;TRX&#39;,</span>
+<a name="line-354"></a><span class="gi">+         &#39;VEN&#39;,</span>
+<a name="line-355"></a><span class="gi">+         &#39;VIA&#39;,</span>
+<a name="line-356"></a><span class="gi">+         &#39;VIB&#39;,</span>
+<a name="line-357"></a><span class="gi">+         &#39;VIBE&#39;,</span>
+<a name="line-358"></a><span class="gi">+         &#39;WABI&#39;,</span>
+<a name="line-359"></a><span class="gi">+         &#39;WAVES&#39;,</span>
+<a name="line-360"></a><span class="gi">+         &#39;WINGS&#39;,</span>
+<a name="line-361"></a><span class="gi">+         &#39;WTC&#39;,</span>
+<a name="line-362"></a><span class="gi">+         &#39;XLM&#39;,</span>
+<a name="line-363"></a><span class="gi">+         &#39;XMR&#39;,</span>
+<a name="line-364"></a><span class="gi">+         &#39;XRP&#39;,</span>
+<a name="line-365"></a><span class="gi">+         &#39;XVG&#39;,</span>
+<a name="line-366"></a><span class="gi">+         &#39;XZC&#39;,</span>
+<a name="line-367"></a><span class="gi">+         &#39;YOYO&#39;,</span>
+<a name="line-368"></a><span class="gi">+         &#39;ZEC&#39;,</span>
+<a name="line-369"></a><span class="gi">+         &#39;ZRX&#39;]:</span>
+<a name="line-370"></a><span class="gi">+</span>
+<a name="line-371"></a><span class="gi">+    strat = Strategy1()</span>
+<a name="line-372"></a><span class="gi">+    strat.asset = asset</span>
+<a name="line-373"></a><span class="gi">+    strat.start()</span>
+<a name="line-374"></a>
+<a name="line-375"></a><div class="annotation-comment"><div class="document">
+<p>This is the loop that spawns a bot for each asset of interest.</p>
+</div>
+</div><a name="line-376"></a>
+<a name="line-377"></a>
+<a name="line-378"></a><span class="gh">diff --git a/util/binance_api.py b/util/binance_api.py</span>
+<a name="line-379"></a>new file mode 100644
+<a name="line-380"></a><span class="gh">index 0000000..5407f9d</span>
+<a name="line-381"></a><span class="gd">--- /dev/null</span>
+<a name="line-382"></a><span class="gi">+++ b/util/binance_api.py</span>
+<a name="line-383"></a><span class="gu">@@ -0,0 +1,44 @@</span>
+<a name="line-384"></a><span class="gi">+#</span>
+<a name="line-385"></a><span class="gi">+#  Utilities to connect with the Binance API.</span>
+<a name="line-386"></a><span class="gi">+#</span>
+<a name="line-387"></a><span class="gi">+#  Basic usage:</span>
+<a name="line-388"></a><span class="gi">+#      from binance_api import client</span>
+<a name="line-389"></a><span class="gi">+#</span>
+<a name="line-390"></a><span class="gi">+</span>
+<a name="line-391"></a><span class="gi">+import gevent.local</span>
+<a name="line-392"></a><span class="gi">+import sys</span>
+<a name="line-393"></a><span class="gi">+</span>
+<a name="line-394"></a><span class="gi">+from binance.client import Client</span>
+<a name="line-395"></a><span class="gi">+from apikeys import api_key, api_secret</span>
+<a name="line-396"></a><span class="gi">+</span>
+<a name="line-397"></a><span class="gi">+</span>
+<a name="line-398"></a><span class="gi">+class ProxyClient(object):</span>
+<a name="line-399"></a><span class="gi">+    &quot;&quot;&quot;This is a proxy for binance.client.Client which allocates to each</span>
+<a name="line-400"></a><span class="gi">+    greenlet its own API connection.</span>
+<a name="line-401"></a><span class="gi">+    &quot;&quot;&quot;</span>
+<a name="line-402"></a><span class="gi">+</span>
+<a name="line-403"></a><span class="gi">+    def __init__(self):</span>
+<a name="line-404"></a><span class="gi">+        self._local = gevent.local.local()</span>
+<a name="line-405"></a><span class="gi">+</span>
+<a name="line-406"></a><span class="gi">+    def __getattr__(self, attr):</span>
+<a name="line-407"></a><span class="gi">+        if not hasattr(self._local, &#39;baseClient&#39;):</span>
+<a name="line-408"></a><span class="gi">+            self._local.baseClient = Client(api_key, api_secret, {&#39;timeout&#39;: 99999})</span>
+<a name="line-409"></a><span class="gi">+</span>
+<a name="line-410"></a><span class="gi">+        if hasattr(self._local.baseClient, attr):</span>
+<a name="line-411"></a><span class="gi">+            return (lambda *args, **kw:</span>
+<a name="line-412"></a><span class="gi">+                self._perform(attr,</span>
+<a name="line-413"></a><span class="gi">+                    lambda: getattr(self._local.baseClient, attr)(*args, **kw)))</span>
+<a name="line-414"></a><span class="gi">+        raise AttributeError(attr)</span>
+<a name="line-415"></a><span class="gi">+</span>
+<a name="line-416"></a><span class="gi">+    def _perform(self, funcName, func):</span>
+<a name="line-417"></a><span class="gi">+        try:</span>
+<a name="line-418"></a><span class="gi">+            result = func()</span>
+<a name="line-419"></a><span class="gi">+        except Exception, e:</span>
+<a name="line-420"></a><span class="gi">+            print termcolor.colored(&#39;EXCEPTION %s&#39; % e, &#39;red&#39;)</span>
+<a name="line-421"></a><span class="gi">+            if e.code in (-1003, -1015, -1016):</span>
+<a name="line-422"></a><span class="gi">+                sys.exit(1)</span>
+<a name="line-423"></a><span class="gi">+            raise e</span>
+<a name="line-424"></a><span class="gi">+        return result</span>
+<a name="line-425"></a><span class="gi">+</span>
+<a name="line-426"></a><span class="gi">+</span>
+<a name="line-427"></a><span class="gi">+client = ProxyClient()</span>
+<a name="line-428"></a>
+<a name="line-429"></a><div class="annotation-comment"><div class="document">
+<p>This is necessary so that each bot will have its own connection to the API which will not interfere with other bots.</p>
+</div>
+</div><a name="line-430"></a>
+<a name="line-431"></a>
+<a name="line-432"></a><span class="gh">diff --git a/util/binance_ws.py b/util/binance_ws.py</span>
+<a name="line-433"></a>new file mode 100644
+<a name="line-434"></a><span class="gh">index 0000000..ae9e9fe</span>
+<a name="line-435"></a><span class="gd">--- /dev/null</span>
+<a name="line-436"></a><span class="gi">+++ b/util/binance_ws.py</span>
+<a name="line-437"></a><span class="gu">@@ -0,0 +1,40 @@</span>
+<a name="line-438"></a><span class="gi">+</span>
+<a name="line-439"></a><span class="gi">+#</span>
+<a name="line-440"></a><span class="gi">+# This file contains a bot that will read the Binance WebSocket stream and</span>
+<a name="line-441"></a><span class="gi">+# update the market data as data comes in,</span>
+<a name="line-442"></a><span class="gi">+#</span>
+<a name="line-443"></a><span class="gi">+</span>
+<a name="line-444"></a><span class="gi">+</span>
+<a name="line-445"></a><span class="gi">+import datetime</span>
+<a name="line-446"></a><span class="gi">+import decimal</span>
+<a name="line-447"></a><span class="gi">+import gevent</span>
+<a name="line-448"></a><span class="gi">+import ujson</span>
+<a name="line-449"></a><span class="gi">+import termcolor</span>
+<a name="line-450"></a><span class="gi">+</span>
+<a name="line-451"></a><span class="gi">+from ws4py.client import geventclient</span>
+<a name="line-452"></a><span class="gi">+</span>
+<a name="line-453"></a><span class="gi">+from pyTrades.util import market</span>
+<a name="line-454"></a><span class="gi">+</span>
+<a name="line-455"></a><span class="gi">+</span>
+<a name="line-456"></a><span class="gi">+def streamBot():</span>
+<a name="line-457"></a><span class="gi">+    print termcolor.colored(&#39;Connecting to WebSocket&#39;, &#39;blue&#39;)</span>
+<a name="line-458"></a><span class="gi">+</span>
+<a name="line-459"></a><span class="gi">+    ws = geventclient.WebSocketClient(&#39;wss://stream.binance.com:9443/ws/!ticker@arr&#39;)</span>
+<a name="line-460"></a><span class="gi">+    ws.connect()</span>
+<a name="line-461"></a><span class="gi">+</span>
+<a name="line-462"></a><span class="gi">+    while True:</span>
+<a name="line-463"></a><span class="gi">+        m = ws.receive()</span>
+<a name="line-464"></a><span class="gi">+        if m is not None:</span>
+<a name="line-465"></a><span class="gi">+            symbolList = []</span>
+<a name="line-466"></a><span class="gi">+</span>
+<a name="line-467"></a><span class="gi">+            for symbol in ujson.loads(m.data):</span>
+<a name="line-468"></a><span class="gi">+                symbolName, curPrice = symbol[&#39;s&#39;].upper(), symbol[&#39;c&#39;]</span>
+<a name="line-469"></a><span class="gi">+                symbolList.append(symbolName)</span>
+<a name="line-470"></a><span class="gi">+</span>
+<a name="line-471"></a><span class="gi">+                market.getMemo(symbolName, create=True).add(</span>
+<a name="line-472"></a><span class="gi">+                    datetime.datetime.now(),</span>
+<a name="line-473"></a><span class="gi">+                    decimal.Decimal(curPrice))</span>
+<a name="line-474"></a><span class="gi">+</span>
+<a name="line-475"></a><span class="gi">+            print &#39;Received stream data (%d assets)&#39; % len(symbolList)</span>
+<a name="line-476"></a><span class="gi">+        else:</span>
+<a name="line-477"></a><span class="gi">+            break</span>
+<a name="line-478"></a>
+<a name="line-479"></a><div class="annotation-comment"><div class="document">
+<p>This fetches price data from WebSocket.</p>
+</div>
+</div><a name="line-480"></a>
+<a name="line-481"></a><span class="gh">diff --git a/util/market.py b/util/market.py</span>
+<a name="line-482"></a>new file mode 100644
+<a name="line-483"></a><span class="gh">index 0000000..8de82c6</span>
+<a name="line-484"></a><span class="gd">--- /dev/null</span>
+<a name="line-485"></a><span class="gi">+++ b/util/market.py</span>
+<a name="line-486"></a><span class="gu">@@ -0,0 +1,119 @@</span>
+<a name="line-487"></a><span class="gi">+#</span>
+<a name="line-488"></a><span class="gi">+# Utilities for dealing with market data.</span>
+<a name="line-489"></a><span class="gi">+#</span>
+<a name="line-490"></a><span class="gi">+#  Example use:</span>
+<a name="line-491"></a><span class="gi">+#    Get current price -</span>
+<a name="line-492"></a><span class="gi">+#        &gt;&gt;&gt; market.price(&#39;BNB&#39;, &#39;USDT&#39;)</span>
+<a name="line-493"></a><span class="gi">+#</span>
+<a name="line-494"></a><span class="gi">+#    Retrieve a historical price -</span>
+<a name="line-495"></a><span class="gi">+#        &gt;&gt;&gt; market.price(&#39;BNB&#39;, &#39;USDT&#39;, minsAgo=5)</span>
+<a name="line-496"></a><span class="gi">+#</span>
+<a name="line-497"></a><span class="gi">+</span>
+<a name="line-498"></a><span class="gi">+import bintrees</span>
+<a name="line-499"></a><span class="gi">+import decimal</span>
+<a name="line-500"></a><span class="gi">+import datetime</span>
+<a name="line-501"></a><span class="gi">+import time</span>
+<a name="line-502"></a><span class="gi">+</span>
+<a name="line-503"></a><span class="gi">+from binance_api import client</span>
+<a name="line-504"></a><span class="gi">+</span>
+<a name="line-505"></a><span class="gi">+</span>
+<a name="line-506"></a><span class="gi">+class PriceMemo(object):</span>
+<a name="line-507"></a><span class="gi">+    &quot;&quot;&quot;Stores historical price data in memory.&quot;&quot;&quot;</span>
+<a name="line-508"></a><span class="gi">+    def __init__(self):</span>
+<a name="line-509"></a><span class="gi">+        self.tree = bintrees.RBTree()</span>
+<a name="line-510"></a><span class="gi">+</span>
+<a name="line-511"></a><span class="gi">+    def getPriceAt(self, when):</span>
+<a name="line-512"></a><span class="gi">+        if when in self.tree:</span>
+<a name="line-513"></a><span class="gi">+            return self.tree[when]</span>
+<a name="line-514"></a><span class="gi">+        else:</span>
+<a name="line-515"></a><span class="gi">+            try:</span>
+<a name="line-516"></a><span class="gi">+                floorKey = self.tree.floor_key(when)</span>
+<a name="line-517"></a><span class="gi">+                ceilKey = self.tree.ceiling_key(when)</span>
+<a name="line-518"></a><span class="gi">+</span>
+<a name="line-519"></a><span class="gi">+                # Linear interpolation if time requested is between two</span>
+<a name="line-520"></a><span class="gi">+                # data points.</span>
+<a name="line-521"></a><span class="gi">+                ceilFrac = decimal.Decimal((when - floorKey).total_seconds() /</span>
+<a name="line-522"></a><span class="gi">+                                            (ceilKey - floorKey).total_seconds())</span>
+<a name="line-523"></a><span class="gi">+                floorFrac = 1 - ceilFrac</span>
+<a name="line-524"></a><span class="gi">+</span>
+<a name="line-525"></a><span class="gi">+                return (self.tree[floorKey] * floorFrac +</span>
+<a name="line-526"></a><span class="gi">+                        self.tree[ceilKey] * ceilFrac)</span>
+<a name="line-527"></a><span class="gi">+</span>
+<a name="line-528"></a><span class="gi">+            except KeyError:</span>
+<a name="line-529"></a><span class="gi">+                return None</span>
+<a name="line-530"></a><span class="gi">+</span>
+<a name="line-531"></a><span class="gi">+    def hasPriceAt(self, when):</span>
+<a name="line-532"></a><span class="gi">+        return self.getPriceAt(when) is not None</span>
+<a name="line-533"></a><span class="gi">+</span>
+<a name="line-534"></a><span class="gi">+    def getLatestPrice(self):</span>
+<a name="line-535"></a><span class="gi">+        when, price = self.tree.max_item()</span>
+<a name="line-536"></a><span class="gi">+        return price, when</span>
+<a name="line-537"></a><span class="gi">+</span>
+<a name="line-538"></a><span class="gi">+    def isEmpty(self):</span>
+<a name="line-539"></a><span class="gi">+        return len(self.tree) == 0</span>
+<a name="line-540"></a><span class="gi">+</span>
+<a name="line-541"></a><span class="gi">+    def add(self, when, price):</span>
+<a name="line-542"></a><span class="gi">+        self.tree[when] = price</span>
+<a name="line-543"></a><span class="gi">+</span>
+<a name="line-544"></a><span class="gi">+</span>
+<a name="line-545"></a><span class="gi">+# Map from (asset, quoteAsset) to PriceMemo</span>
+<a name="line-546"></a><span class="gi">+assetMemos = {}</span>
+<a name="line-547"></a><span class="gi">+</span>
+<a name="line-548"></a><span class="gi">+def getMemo(asset, quoteAsset=None, create=False):</span>
+<a name="line-549"></a><span class="gi">+    key = asset</span>
+<a name="line-550"></a><span class="gi">+    if quoteAsset:</span>
+<a name="line-551"></a><span class="gi">+        key = key + quoteAsset</span>
+<a name="line-552"></a><span class="gi">+    if key in assetMemos:</span>
+<a name="line-553"></a><span class="gi">+        return assetMemos[key]</span>
+<a name="line-554"></a><span class="gi">+    elif create:</span>
+<a name="line-555"></a><span class="gi">+        assetMemo = PriceMemo()</span>
+<a name="line-556"></a><span class="gi">+        assetMemos[key] = assetMemo</span>
+<a name="line-557"></a><span class="gi">+        return assetMemo</span>
+<a name="line-558"></a><span class="gi">+    else:</span>
+<a name="line-559"></a><span class="gi">+        return None</span>
+<a name="line-560"></a><span class="gi">+</span>
+<a name="line-561"></a><span class="gi">+</span>
+<a name="line-562"></a><span class="gi">+def price(asset, quoteAsset, daysAgo=0, hoursAgo=0, minsAgo=0, secsAgo=0):</span>
+<a name="line-563"></a><span class="gi">+    &quot;&quot;&quot;Return the price of &#39;asset&#39; in units of &#39;quoteAsset&#39;. Specify</span>
+<a name="line-564"></a><span class="gi">+    daysAgo, hoursAgo, minsAgo, and/or secsAgo to retrieve historical</span>
+<a name="line-565"></a><span class="gi">+    prices. Otherwise, returns the current price.</span>
+<a name="line-566"></a><span class="gi">+    &quot;&quot;&quot;</span>
+<a name="line-567"></a><span class="gi">+    symbol = asset + quoteAsset</span>
+<a name="line-568"></a><span class="gi">+    assetMemo = getMemo(asset, quoteAsset, create=True)</span>
+<a name="line-569"></a><span class="gi">+</span>
+<a name="line-570"></a><span class="gi">+    timeAgo = datetime.timedelta(daysAgo, secsAgo + 60*(minsAgo + hoursAgo*60))</span>
+<a name="line-571"></a><span class="gi">+    assetTime = datetime.datetime.now() - timeAgo</span>
+<a name="line-572"></a><span class="gi">+</span>
+<a name="line-573"></a><span class="gi">+    if not timeAgo:</span>
+<a name="line-574"></a><span class="gi">+        while True:</span>
+<a name="line-575"></a><span class="gi">+            if not assetMemo.isEmpty():</span>
+<a name="line-576"></a><span class="gi">+                price, whenPrice = assetMemo.getLatestPrice()</span>
+<a name="line-577"></a><span class="gi">+                agePrice = datetime.datetime.now() - whenPrice</span>
+<a name="line-578"></a><span class="gi">+                if agePrice.total_seconds() &lt;= 5:</span>
+<a name="line-579"></a><span class="gi">+                    # Last known data is fresh enough.</span>
+<a name="line-580"></a><span class="gi">+                    return price</span>
+<a name="line-581"></a><span class="gi">+</span>
+<a name="line-582"></a><span class="gi">+            # Wait for the stream bot to give us our data.</span>
+<a name="line-583"></a><span class="gi">+            time.sleep(1)</span>
+<a name="line-584"></a><span class="gi">+</span>
+<a name="line-585"></a><span class="gi">+    else:</span>
+<a name="line-586"></a><span class="gi">+        # Check if we have this data in memo.</span>
+<a name="line-587"></a><span class="gi">+        fromId = None</span>
+<a name="line-588"></a><span class="gi">+        while not assetMemo.hasPriceAt(assetTime):</span>
+<a name="line-589"></a><span class="gi">+</span>
+<a name="line-590"></a><span class="gi">+            # If not, page back through the history on the server until we</span>
+<a name="line-591"></a><span class="gi">+            # find it.</span>
+<a name="line-592"></a><span class="gi">+            trades = client.get_historical_trades(symbol=symbol, limit=500,</span>
+<a name="line-593"></a><span class="gi">+                                                  fromId=fromId)</span>
+<a name="line-594"></a><span class="gi">+            if not trades:</span>
+<a name="line-595"></a><span class="gi">+                break</span>
+<a name="line-596"></a><span class="gi">+            else:</span>
+<a name="line-597"></a><span class="gi">+                fromId = trades[0][&#39;id&#39;] - 500</span>
+<a name="line-598"></a><span class="gi">+            for trade in trades:</span>
+<a name="line-599"></a><span class="gi">+                assetMemo.add(datetime.datetime.fromtimestamp(trade[&#39;time&#39;]/1000.0),</span>
+<a name="line-600"></a><span class="gi">+                              decimal.Decimal(trade[&#39;price&#39;]))</span>
+<a name="line-601"></a><span class="gi">+</span>
+<a name="line-602"></a><span class="gi">+        currentPrice = assetMemo.getPriceAt(assetTime)</span>
+<a name="line-603"></a><span class="gi">+        return currentPrice</span>
+<a name="line-604"></a><span class="gi">+</span>
+<a name="line-605"></a>
+<a name="line-606"></a><div class="annotation-comment"><div class="document">
+<p>This retrieves price data in a handy way.</p>
+</div>
+</div><a name="line-607"></a>
+<a name="line-608"></a>
+<a name="line-609"></a><span class="gh">diff --git a/util/task.py b/util/task.py</span>
+<a name="line-610"></a>new file mode 100644
+<a name="line-611"></a><span class="gh">index 0000000..b0b90cc</span>
+<a name="line-612"></a><span class="gd">--- /dev/null</span>
+<a name="line-613"></a><span class="gi">+++ b/util/task.py</span>
+<a name="line-614"></a><span class="gu">@@ -0,0 +1,68 @@</span>
+<a name="line-615"></a><span class="gi">+</span>
+<a name="line-616"></a><span class="gi">+#</span>
+<a name="line-617"></a><span class="gi">+# Utilities functions for handling cooperative multitasking.</span>
+<a name="line-618"></a><span class="gi">+#</span>
+<a name="line-619"></a><span class="gi">+</span>
+<a name="line-620"></a><span class="gi">+import filelike</span>
+<a name="line-621"></a><span class="gi">+import gevent</span>
+<a name="line-622"></a><span class="gi">+import sys</span>
+<a name="line-623"></a><span class="gi">+import termcolor</span>
+<a name="line-624"></a><span class="gi">+</span>
+<a name="line-625"></a><span class="gi">+</span>
+<a name="line-626"></a><span class="gi">+class OutCapture(filelike.FileLikeBase):</span>
+<a name="line-627"></a><span class="gi">+    &quot;&quot;&quot;A file-like object that combines output from multiple tasks,</span>
+<a name="line-628"></a><span class="gi">+    distinguishing each with the name of the task.</span>
+<a name="line-629"></a><span class="gi">+    &quot;&quot;&quot;</span>
+<a name="line-630"></a><span class="gi">+    task = None</span>
+<a name="line-631"></a><span class="gi">+    outTask = None</span>
+<a name="line-632"></a><span class="gi">+    inLine = False</span>
+<a name="line-633"></a><span class="gi">+</span>
+<a name="line-634"></a><span class="gi">+    def __init__(self, baseFile):</span>
+<a name="line-635"></a><span class="gi">+        &quot;&quot;&quot;Initialize the instance.</span>
+<a name="line-636"></a><span class="gi">+</span>
+<a name="line-637"></a><span class="gi">+        Arguments:</span>
+<a name="line-638"></a><span class="gi">+            baseFile (filelike): File output where the combined out will be</span>
+<a name="line-639"></a><span class="gi">+              sent.</span>
+<a name="line-640"></a><span class="gi">+        &quot;&quot;&quot;</span>
+<a name="line-641"></a><span class="gi">+        super(OutCapture, self).__init__()</span>
+<a name="line-642"></a><span class="gi">+        self.baseFile = baseFile</span>
+<a name="line-643"></a><span class="gi">+</span>
+<a name="line-644"></a><span class="gi">+    def setTask(self, task):</span>
+<a name="line-645"></a><span class="gi">+        self.task = task</span>
+<a name="line-646"></a><span class="gi">+</span>
+<a name="line-647"></a><span class="gi">+    def _write(self, data, flushing=False):</span>
+<a name="line-648"></a><span class="gi">+        &quot;&quot;&quot;Handle a write from one of the tasks.&quot;&quot;&quot;</span>
+<a name="line-649"></a><span class="gi">+        if not len(data):</span>
+<a name="line-650"></a><span class="gi">+            return</span>
+<a name="line-651"></a><span class="gi">+</span>
+<a name="line-652"></a><span class="gi">+        if self.task != self.outTask:</span>
+<a name="line-653"></a><span class="gi">+            if self.inLine:</span>
+<a name="line-654"></a><span class="gi">+                self.baseFile.write(&#39;\n&#39;)</span>
+<a name="line-655"></a><span class="gi">+            self.baseFile.write(termcolor.colored(self.task.name, &#39;yellow&#39;) + &#39;: &#39;)</span>
+<a name="line-656"></a><span class="gi">+        elif not self.inLine:</span>
+<a name="line-657"></a><span class="gi">+            self.baseFile.write(termcolor.colored(self.task.name, &#39;yellow&#39;) + &#39;: &#39;)</span>
+<a name="line-658"></a><span class="gi">+</span>
+<a name="line-659"></a><span class="gi">+        self.baseFile.write(data)</span>
+<a name="line-660"></a><span class="gi">+        self.outTask = self.task</span>
+<a name="line-661"></a><span class="gi">+        self.inLine = (data[-1] != &#39;\n&#39;)</span>
+<a name="line-662"></a><span class="gi">+</span>
+<a name="line-663"></a><span class="gi">+</span>
+<a name="line-664"></a><span class="gi">+class TaskGreenlet(gevent.Greenlet):</span>
+<a name="line-665"></a><span class="gi">+    &quot;&quot;&quot;A named task that redirects its output to an OutCapture.&quot;&quot;&quot;</span>
+<a name="line-666"></a><span class="gi">+</span>
+<a name="line-667"></a><span class="gi">+    outCapture = OutCapture(sys.stdout)</span>
+<a name="line-668"></a><span class="gi">+</span>
+<a name="line-669"></a><span class="gi">+    def __init__(self, *args, **kw):</span>
+<a name="line-670"></a><span class="gi">+        self.name = kw.pop(&#39;name&#39;)</span>
+<a name="line-671"></a><span class="gi">+        super(TaskGreenlet, self).__init__(*args, **kw)</span>
+<a name="line-672"></a><span class="gi">+</span>
+<a name="line-673"></a><span class="gi">+    def __repr__(self):</span>
+<a name="line-674"></a><span class="gi">+        &quot;&quot;&quot;Display this task as its name.&quot;&quot;&quot;</span>
+<a name="line-675"></a><span class="gi">+        return self.name</span>
+<a name="line-676"></a><span class="gi">+</span>
+<a name="line-677"></a><span class="gi">+    def switch(self, *args):</span>
+<a name="line-678"></a><span class="gi">+        &quot;&quot;&quot;Redirect the output for the task and switch to it.&quot;&quot;&quot;</span>
+<a name="line-679"></a><span class="gi">+        self.outCapture.setTask(self)</span>
+<a name="line-680"></a><span class="gi">+        sys.stdout = self.outCapture</span>
+<a name="line-681"></a><span class="gi">+        super(TaskGreenlet, self).switch(*args)</span>
+<a name="line-682"></a>
+<a name="line-683"></a><div class="annotation-comment"><div class="document">
+<p>This allows the multiple tasks to be run with the output annotated with the name of each bot.</p>
+</div>
+</div></pre></div>
+
+    <script type="text/annotations">
+    [
+  [
+    null,
+    false,
+    4,
+    "Adding the gevent library which implements an event hub for cooperative multitasking."
+  ],
+  [
+    null,
+    false,
+    4,
+    "This allows us to run an indefinite number of bots in the same process."
+  ],
+  [
+    null,
+    false,
+    5,
+    "All other code here is moved to strat1."
+  ],
+  [
+    null,
+    false,
+    8,
+    "This is where we start utility bots."
+  ],
+  [
+    null,
+    false,
+    10,
+    "This is where we start the trading bots."
+  ],
+  [
+    null,
+    false,
+    18,
+    "This is the \"abstract base class\" for strategies, which the strategies will inherit from."
+  ],
+  [
+    null,
+    false,
+    24,
+    "This is similar to the former pyTrades.py code. One difference here is that"
+  ],
+  [
+    null,
+    false,
+    24,
+    "asset is defined at the class level, but is set to None. This is because"
+  ],
+  [
+    null,
+    false,
+    24,
+    "it will be set to different assets (see at the end of this file.)"
+  ],
+  [
+    null,
+    false,
+    26,
+    "A few random waits are inserted between API calls in the startup to avoid flooding the API."
+  ],
+  [
+    null,
+    false,
+    28,
+    "This is the loop that spawns a bot for each asset of interest."
+  ],
+  [
+    null,
+    false,
+    34,
+    "This is necessary so that each bot will have its own connection to the API which will not interfere with other bots."
+  ],
+  [
+    null,
+    false,
+    40,
+    "This fetches price data from WebSocket."
+  ],
+  [
+    null,
+    false,
+    45,
+    "This retrieves price data in a handy way."
+  ],
+  [
+    null,
+    false,
+    51,
+    "This allows the multiple tasks to be run with the output annotated with the name of each bot."
+  ]
+]
+    </script>
+</body>
+</html>

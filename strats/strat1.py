@@ -60,6 +60,9 @@ class Strategy1(abstract.AbstractStrategy):
         lotSizeMaxQty = float(lotSizeFilter.get('maxQty', 0.0))
         lotSizeStep = float(lotSizeFilter.get('stepSize', 0.0))
 
+        notionalFilter = symbolFilters.get('MIN_NOTIONAL', {})
+        minNotional = notionalFilter.get('minNotional', 0.0)
+
         # This is the number of digits we should round to in order
         # to conform to the lot's stepSize restriction.
         lotSizeStepNumDigits = int(round(-math.log(lotSizeStep, 10)))
@@ -129,6 +132,13 @@ class Strategy1(abstract.AbstractStrategy):
 
             if wantQty:
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
+                if qty < lotSizeMinQty:
+                    print colored('Not buying %s due to being less than min qty %s' % (qty, lotSizeMinQty), 'yellow')
+                    continue
+                if (qty * sellLevel) < minNotional:
+                    print colored('Not buying %s due to being less than min notional %s' % (qty, minNotional), 'yellow')
+                    continue
+
                 print 'Buying', qty, 'of', asset, 'to sell for', sellLevel
 
                 order = client.create_order(
