@@ -1,1 +1,5 @@
 bintrees
+gevent
+filelike
+ws4py
+termcolor
