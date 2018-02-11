@@ -8,12 +8,12 @@
 import datetime
 import decimal
 import gevent
-import ujson
 import termcolor
 
 from ws4py.client import geventclient
 
 from pyTrades.util import market
+from pyTrades.util import json
 
 
 def streamBot():
@@ -27,7 +27,7 @@ def streamBot():
         if m is not None:
             symbolList = []
 
-            for symbol in ujson.loads(m.data):
+            for symbol in json.loads(m.data):
                 symbolName, curPrice = symbol['s'].upper(), symbol['c']
                 symbolList.append(symbolName)
 
