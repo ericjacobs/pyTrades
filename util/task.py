@@ -51,9 +51,11 @@ class TaskGreenlet(gevent.Greenlet):
     """A named task that redirects its output to an OutCapture."""
 
     outCapture = OutCapture(sys.stdout)
+    taskId = 1
 
     def __init__(self, *args, **kw):
-        self.name = kw.pop('name')
+        self.name = kw.pop('name') + (' (#%d)' % TaskGreenlet.taskId)
+        TaskGreenlet.taskId += 1
         super(TaskGreenlet, self).__init__(*args, **kw)
 
     def __repr__(self):
