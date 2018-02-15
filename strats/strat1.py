@@ -45,6 +45,9 @@ class Strategy1(abstract.AbstractStrategy):
         currentPrice = client.get_ticker(symbol =symbol)
         currentPrice=float(currentPrice['lastPrice'])
 
+        # Do a random wait to avoid slamming the server on startup.
+        time.sleep(random.randrange(2, 200))
+
         print colored('Initializing - step 2', "cyan")
 
         # Get the min and max quantity for trading under this symbol.
@@ -430,4 +433,4 @@ for n, assetPair in enumerate([
     strat = Strategy1()
     strat.asset = assetPair[0]
     strat.otherasset = assetPair[1]
-    strat.start(delayTime=n * 2)
+    strat.start(delayTime=n * 4)
