@@ -6,11 +6,7 @@
 
 import os
 import sys
-<<<<<<< HEAD
-sys.path.append(r'c:\')
-=======
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
->>>>>>> 2bdb76476511d6dbe1193fda73c3359705eb2524
 
 import math
 import time
