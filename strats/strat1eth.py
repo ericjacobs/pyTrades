@@ -104,8 +104,8 @@ class Strategy1ETH(abstract.AbstractStrategy):
             buyLevel2 = buyPrice * _d(0.95)
             buyLevel3 = buyPrice * _d(0.93)
 
-            buySpend1 = baseBalance * _d(0.20)	# How much to spend at buyLevel1 price.
-            buySpend2 = baseBalance * _d(0.30)	# How much to spend at buyLevel2 price.
+            buySpend1 = baseBalance * _d(0.10)	# How much to spend at buyLevel1 price.
+            buySpend2 = baseBalance * _d(0.25)	# How much to spend at buyLevel2 price.
             buySpend3 = baseBalance * _d(0.50)	# How much to spend at buyLevel3 price.
 
             print colored('Waiting to buy at', "blue"), buyLevel1, buyLevel2, buyLevel3
@@ -302,4 +302,4 @@ for n, assetPair in enumerate([
     strat = Strategy1ETH()
     strat.asset = assetPair[0]
     strat.otherasset = assetPair[1]
-    strat.start(delayTime=1 + n * 4)
+    strat.start(delayTime=2 + n * 5)
