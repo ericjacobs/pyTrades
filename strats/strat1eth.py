@@ -62,10 +62,15 @@ class Strategy1ETH(abstract.AbstractStrategy):
 
         notionalFilter = symbolFilters.get('MIN_NOTIONAL', {})
         minNotional = float(notionalFilter.get('minNotional', 0.0))
+        precision = int(symbolInfo['quotePrecision']) - 1
+
+        priceFilter = symbolFilters.get('PRICE_FILTER', {})
+        tickSize = float(priceFilter.get('tickSize', 0.0))
 
         # This is the number of digits we should round to in order
         # to conform to the lot's stepSize restriction.
         lotSizeStepNumDigits = int(round(-math.log(lotSizeStep, 10)))
+        tickSizeNumDigits = int(round(-math.log(tickSize, 10)))
 
         # Do a random wait to avoid slamming the server on startup.
         time.sleep(random.randrange(2, 200))
@@ -78,7 +83,7 @@ class Strategy1ETH(abstract.AbstractStrategy):
 
         # How much of otherasset (e.g. BTC) we want to work with, expressed as
         # fraction of the current balance of otherasset.
-        baseBalanceFraction = _d(0.7)       # 20% of current balance
+        baseBalanceFraction = _d(0.7)
         baseBalance = otherbalance * baseBalanceFraction
 
         cycle = 0
@@ -89,6 +94,9 @@ class Strategy1ETH(abstract.AbstractStrategy):
         print 'Trading with', baseBalance, 'of', otherasset
 
         while True:
+            # Memory cleanup.
+            market.deleteOlderThan(asset, otherasset, minsAgo=10)
+
             buyPrice = market.price(asset, otherasset, minsAgo=1)
             movingAvg = market.movingAverage(asset, otherasset, mins=7)
 
@@ -135,7 +143,7 @@ class Strategy1ETH(abstract.AbstractStrategy):
 
             if wantQty:
                 sellLevel = currentPrice * _d(1.03)
-                sellLevel = round(sellLevel, 10)
+                sellLevel = round(_d(sellLevel), tickSizeNumDigits)
 
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
                 if qty < lotSizeMinQty:
@@ -147,12 +155,17 @@ class Strategy1ETH(abstract.AbstractStrategy):
 
                 print 'Buying', qty, 'of', asset, 'to sell for', sellLevel
 
-                order = client.create_order(
-                    symbol=symbol,
-                    side=Client.SIDE_BUY,
-                    type=Client.ORDER_TYPE_MARKET,
-                    quantity=float(qty)
-                )
+                try:
+                    order = client.create_order(
+                        symbol=symbol,
+                        side=Client.SIDE_BUY,
+                        type=Client.ORDER_TYPE_MARKET,
+                        quantity=float(qty)
+                    )
+                except Exception, e:
+                    print 'Exception', e
+                    time.sleep(1)
+                    continue
 
                 print colored('Will sell at', "blue"), '{0:f}'.format(sellLevel)
                 time.sleep(5)
@@ -162,7 +175,7 @@ class Strategy1ETH(abstract.AbstractStrategy):
                     side=Client.SIDE_SELL,
                     type=Client.ORDER_TYPE_LIMIT,
                     timeInForce='GTC',
-                    price='{0:.10f}'.format(sellLevel),
+                    price='{:0.0{}f}'.format(sellLevel, precision),
                     quantity='{0:f}'.format(qty)
                 )
                 
