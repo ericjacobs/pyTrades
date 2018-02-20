@@ -90,12 +90,12 @@ class Strategy1(abstract.AbstractStrategy):
         while True:
             buyPrice = market.price(asset, otherasset, minsAgo=1)
 
-            buyLevel1 = buyPrice * _d(0.99)
-            buyLevel2 = buyPrice * _d(0.98)
-            buyLevel3 = buyPrice * _d(0.97)
+            buyLevel1 = buyPrice * _d(0.965)
+            buyLevel2 = buyPrice * _d(0.95)
+            buyLevel3 = buyPrice * _d(0.93)
 
-            buySpend1 = baseBalance * _d(0.25)	# How much to spend at buyLevel1 price.
-            buySpend2 = baseBalance * _d(0.50)	# How much to spend at buyLevel2 price.
+            buySpend1 = baseBalance * _d(0.10)	# How much to spend at buyLevel1 price.
+            buySpend2 = baseBalance * _d(0.25)	# How much to spend at buyLevel2 price.
             buySpend3 = baseBalance * _d(0.50)	# How much to spend at buyLevel3 price.
 
             print colored('Waiting to buy at', "blue"), buyLevel1, buyLevel2, buyLevel3
@@ -127,7 +127,7 @@ class Strategy1(abstract.AbstractStrategy):
                 buyLevel = 1
 
             if wantQty:
-                sellLevel = currentPrice * _d(1.01)
+                sellLevel = currentPrice * _d(1.035)
                 sellLevel = round(sellLevel, 10)
 
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
