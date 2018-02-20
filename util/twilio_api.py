@@ -1,20 +1,22 @@
 #
-#  Utilities to connect with the Binance API.
+#  Utilities to connect with the Twilio API.
 #
 #  Basic usage:
-#      from binance_api import client
+#      from twilio_api import client_messages
+#
+#      twilio_api.client_messages.create(...)
 #
 
 import gevent.local
 import sys
 import termcolor
 
-from binance.client import Client
-from apikeys import binance_api_key, binance_api_secret
+from twilio.rest import Client
+from apikeys import twilio_api_account, twilio_api_token
 
 
 class ProxyClient(object):
-    """This is a proxy for binance.client.Client which allocates to each
+    """This is a proxy for twilio.rest.Client which allocates to each
     greenlet its own API connection.
     """
 
@@ -23,12 +25,12 @@ class ProxyClient(object):
 
     def __getattr__(self, attr):
         if not hasattr(self._local, 'baseClient'):
-            self._local.baseClient = Client(binance_api_key, binance_api_secret, {'timeout': 99999})
+            self._local.baseClient = Client(twilio_api_account, twilio_api_token)
 
-        if hasattr(self._local.baseClient, attr):
+        if hasattr(self._local.baseClient.messages, attr):
             return (lambda *args, **kw:
                 self._perform(attr,
-                    lambda: getattr(self._local.baseClient, attr)(*args, **kw), args, kw))
+                    lambda: getattr(self._local.baseClient.messages, attr)(*args, **kw), args, kw))
         raise AttributeError(attr)
 
     def _perform(self, funcName, func, args, kw):
@@ -37,10 +39,8 @@ class ProxyClient(object):
         except Exception, e:
             print termcolor.colored('EXCEPTION %s' % e, 'red')
             print 'when calling', funcName, args, kw
-            if e.code == -1021:
-                raise e
-            sys.exit(1)
+            raise e
         return result
 
 
-client = ProxyClient()
+client_messages = ProxyClient()

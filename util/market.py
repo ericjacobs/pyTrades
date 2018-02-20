@@ -54,8 +54,29 @@ class PriceMemo(object):
 
     def add(self, when, price):
         self.tree[when] = price
+    
+    def averageByMinute(self, whenFrom, whenTo):
+        """Returns the price averaged by each minute in the given time
+        range.
+        
+        Returns:
+          iterator of (when, price)
+        """
+        when = whenFrom
+        incr = datetime.timedelta(minutes=1)
 
+        while when < whenTo:
+            totalPrice = decimal.Decimal(0)
+            numPrices = 0
+            for price in self.tree[when:when + incr].values():
+                totalPrice += price
+                numPrices += 1
+            
+            if numPrices > 0:
+                yield when, (totalPrice / numPrices)
+            when += incr
 
+            
 # Map from (asset, quoteAsset) to PriceMemo
 assetMemos = {}
 
@@ -103,6 +124,7 @@ def price(asset, quoteAsset, daysAgo=0, hoursAgo=0, minsAgo=0, secsAgo=0):
 
             # If not, page back through the history on the server until we
             # find it.
+            time.sleep(1)
             trades = client.get_historical_trades(symbol=symbol, limit=500,
                                                   fromId=fromId)
             if not trades:
@@ -117,3 +139,32 @@ def price(asset, quoteAsset, daysAgo=0, hoursAgo=0, minsAgo=0, secsAgo=0):
         return currentPrice
 
 
+def movingAverage(asset, quoteAsset, days=0, hours=0, mins=0, secs=0):
+    """Return the current simple moving average of 'asset' in 'quoteAsset' for
+    the specified time period.
+    """
+    startPrice = price(asset, quoteAsset, days, hours, mins, secs)
+    
+    timeAgo = datetime.timedelta(days, secs + 60*(mins + hours*60))
+    assetTime = datetime.datetime.now() - timeAgo
+    assetMemo = getMemo(asset, quoteAsset)
+    
+    totalPrice = decimal.Decimal(0)
+    numPrices = 0
+    for when, avgPrice in assetMemo.averageByMinute(assetTime, datetime.datetime.now()):
+        totalPrice += avgPrice
+        numPrices += 1
+    
+    return totalPrice / numPrices
+
+
+def deleteOlderThan(asset, quoteAsset, daysAgo=0, hoursAgo=0, minsAgo=0, secsAgo=0):
+    """Delete market data of 'asset' in 'quoteAsset' older than the specified
+    time period.
+    """
+    timeAgo = datetime.timedelta(daysAgo, secsAgo + 60*(minsAgo + hoursAgo*60))
+    assetTime = datetime.datetime.now() - timeAgo
+
+    assetMemo = getMemo(asset, quoteAsset)
+    if assetMemo:
+        del assetMemo.tree[:assetTime]

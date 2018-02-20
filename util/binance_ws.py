@@ -22,7 +22,14 @@ def streamBot():
         print termcolor.colored('Connecting to WebSocket', 'blue')
 
         ws = geventclient.WebSocketClient('wss://stream.binance.com:9443/ws/!ticker@arr')
-        ws.connect()
+        try:
+            ws.connect()
+        except Exception, e:
+            print termcolor.colored('WebSocket exception. Waiting 10 seconds and retry', 'red')
+            print e
+            ws.close()
+            time.sleep(10)
+            break
 
         while True:
             m = ws.receive()

@@ -1,4 +1,5 @@
 apikeys.py*
+settings.py*
 *~
 *.pyc
 *.pyo
