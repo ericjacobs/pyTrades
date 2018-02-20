@@ -100,12 +100,12 @@ class Strategy1BTC(abstract.AbstractStrategy):
             buyPrice = market.price(asset, otherasset, minsAgo=1)
             movingAvg = market.movingAverage(asset, otherasset, mins=7)
 
-            buyLevel1 = buyPrice * _d(0.985)
-            buyLevel2 = buyPrice * _d(0.975)
-            buyLevel3 = buyPrice * _d(0.96)
+            buyLevel1 = buyPrice * _d(0.97)
+            buyLevel2 = buyPrice * _d(0.95)
+            buyLevel3 = buyPrice * _d(0.93)
 
-            buySpend1 = baseBalance * _d(0.20)	# How much to spend at buyLevel1 price.
-            buySpend2 = baseBalance * _d(0.30)	# How much to spend at buyLevel2 price.
+            buySpend1 = baseBalance * _d(0.10)	# How much to spend at buyLevel1 price.
+            buySpend2 = baseBalance * _d(0.25)	# How much to spend at buyLevel2 price.
             buySpend3 = baseBalance * _d(0.50)	# How much to spend at buyLevel3 price.
 
             print colored('Waiting to buy at', "blue"), buyLevel1, buyLevel2, buyLevel3
@@ -142,7 +142,7 @@ class Strategy1BTC(abstract.AbstractStrategy):
                 buyLevel = 1
 
             if wantQty:
-                sellLevel = currentPrice * _d(1.015)
+                sellLevel = currentPrice * _d(1.03)
                 sellLevel = round(_d(sellLevel), tickSizeNumDigits)
 
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
@@ -303,4 +303,4 @@ for n, assetPair in enumerate([
     strat = Strategy1BTC()
     strat.asset = assetPair[0]
     strat.otherasset = assetPair[1]
-    strat.start(delayTime=n * 4)
+    strat.start(delayTime=n * 5)

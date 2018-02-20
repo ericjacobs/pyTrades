@@ -18,6 +18,11 @@ def reportBuy(asset, quoteAsset, qty, sellLevel, currentPrice, oldPrice, buyLeve
 
 
 def reporterBot():
+#    twilio_api.client_messages.create(
+#           to=SMS_TO_NUMBER,
+#           from_=MY_PHONE_NUMBER,
+#           body='TestMessage')
+
     while True:
         (asset, quoteAsset, qty, sellLevel, currentPrice, oldPrice, buyLevel) = reportQueue.get()
         message = '%s %s-%s buy %s sell for %s (saw %s, was %s) buyLevel%s' % (
