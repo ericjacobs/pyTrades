@@ -14,11 +14,12 @@ from binance.client import Client
 from termcolor import colored
 
 from pyTrades.util.binance_api import client
+from pyTrades.util import reporter
 from pyTrades.util import market
 from pyTrades.strats import abstract
 
 
-class Strategy1(abstract.AbstractStrategy):
+class Strategy1BNB(abstract.AbstractStrategy):
 
     # Asset will be set in the loop at the end of this file.
     asset = None
@@ -89,10 +90,11 @@ class Strategy1(abstract.AbstractStrategy):
 
         while True:
             buyPrice = market.price(asset, otherasset, minsAgo=1)
+            movingAvg = market.movingAverage(asset, otherasset, mins=7)
 
-            buyLevel1 = buyPrice * _d(0.95)
-            buyLevel2 = buyPrice * _d(0.90)
-            buyLevel3 = buyPrice * _d(0.85)
+            buyLevel1 = buyPrice * _d(0.97)
+            buyLevel2 = buyPrice * _d(0.95)
+            buyLevel3 = buyPrice * _d(0.93)
 
             buySpend1 = baseBalance * _d(0.20)	# How much to spend at buyLevel1 price.
             buySpend2 = baseBalance * _d(0.30)	# How much to spend at buyLevel2 price.
@@ -102,7 +104,12 @@ class Strategy1(abstract.AbstractStrategy):
 
             time.sleep(3)
             currentPrice = market.price(asset, otherasset)
-            print symbol, '=', currentPrice, '   (', currentPrice / buyPrice, ' since 1 minute ago)'
+            print symbol, '=', currentPrice, ' (7 min MA=', movingAvg, ')',
+            if currentPrice > movingAvg:
+                print '  skipping due to being above MA'
+                continue
+
+            print '   MA okay (', currentPrice / buyPrice, ' since 1 minute ago)'
             print 'Open buys:', openBuys
 
             for buyLevel, buyPrice in openBuys.items():
@@ -127,7 +134,7 @@ class Strategy1(abstract.AbstractStrategy):
                 buyLevel = 1
 
             if wantQty:
-                sellLevel = currentPrice * _d(1.01)
+                sellLevel = currentPrice * _d(1.03)
                 sellLevel = round(sellLevel, 10)
 
                 qty = round(_d(wantQty), lotSizeStepNumDigits)
@@ -155,11 +162,12 @@ class Strategy1(abstract.AbstractStrategy):
                     side=Client.SIDE_SELL,
                     type=Client.ORDER_TYPE_LIMIT,
                     timeInForce='GTC',
-                    price='{0:f}'.format(sellLevel),
+                    price='{0:.10f}'.format(sellLevel),
                     quantity='{0:f}'.format(qty)
                 )
-
+                
                 openBuys[buyLevel] = sellLevel
+                reporter.reportBuy(asset, otherasset, qty, sellLevel, currentPrice, buyPrice, buyLevel)
 
                 balance = (client.get_asset_balance(asset))
                 balance = float(balance['free'])
@@ -168,269 +176,54 @@ class Strategy1(abstract.AbstractStrategy):
 
 
 for n, assetPair in enumerate([
-        (u'LTC', u'BTC'),
         (u'BNB', u'BTC'),
-        (u'NEO', u'BTC'),
-        (u'QTUM', u'ETH'),
-        (u'EOS', u'ETH'),
-        (u'SNT', u'ETH'),
-        (u'BNT', u'ETH'),
-        (u'BCC', u'BTC'),
-        (u'GAS', u'BTC'),
         (u'BNB', u'ETH'),
-        (u'HSR', u'BTC'),
-        (u'OAX', u'ETH'),
-        (u'DNT', u'ETH'),
-        (u'MCO', u'ETH'),
-        (u'ICN', u'ETH'),
-        (u'MCO', u'BTC'),
-        (u'WTC', u'BTC'),
-        (u'WTC', u'ETH'),
-        (u'LRC', u'BTC'),
-        (u'LRC', u'ETH'),
-        (u'QTUM', u'BTC'),
-        (u'YOYO', u'BTC'),
-        (u'OMG', u'BTC'),
-        (u'OMG', u'ETH'),
-        (u'ZRX', u'BTC'),
-        (u'ZRX', u'ETH'),
-        (u'STRAT', u'BTC'),
-        (u'STRAT', u'ETH'),
-        (u'SNGLS', u'BTC'),
-        (u'SNGLS', u'ETH'),
-        (u'BQX', u'BTC'),
-        (u'BQX', u'ETH'),
-        (u'KNC', u'BTC'),
-        (u'KNC', u'ETH'),
-        (u'FUN', u'BTC'),
-        (u'FUN', u'ETH'),
-        (u'SNM', u'BTC'),
-        (u'SNM', u'ETH'),
-        (u'NEO', u'ETH'),
-        (u'IOTA', u'BTC'),
-        (u'IOTA', u'ETH'),
-        (u'LINK', u'BTC'),
-        (u'LINK', u'ETH'),
-        (u'XVG', u'BTC'),
-        (u'XVG', u'ETH'),
-        (u'CTR', u'BTC'),
-        (u'CTR', u'ETH'),
-        (u'SALT', u'BTC'),
-        (u'SALT', u'ETH'),
-        (u'MDA', u'BTC'),
-        (u'MDA', u'ETH'),
-        (u'MTL', u'BTC'),
-        (u'MTL', u'ETH'),
-        (u'SUB', u'BTC'),
-        (u'SUB', u'ETH'),
-        (u'EOS', u'BTC'),
-        (u'SNT', u'BTC'),
-        (u'ETC', u'ETH'),
-        (u'ETC', u'BTC'),
-        (u'MTH', u'BTC'),
-        (u'MTH', u'ETH'),
-        (u'ENG', u'BTC'),
-        (u'ENG', u'ETH'),
-        (u'DNT', u'BTC'),
-        (u'ZEC', u'BTC'),
-        (u'ZEC', u'ETH'),
-        (u'BNT', u'BTC'),
-        (u'AST', u'BTC'),
-        (u'AST', u'ETH'),
-        (u'DASH', u'BTC'),
-        (u'DASH', u'ETH'),
-        (u'OAX', u'BTC'),
-        (u'ICN', u'BTC'),
-        (u'BTG', u'BTC'),
-        (u'BTG', u'ETH'),
-        (u'EVX', u'BTC'),
-        (u'EVX', u'ETH'),
-        (u'REQ', u'BTC'),
-        (u'REQ', u'ETH'),
-        (u'VIB', u'BTC'),
-        (u'VIB', u'ETH'),
-        (u'HSR', u'ETH'),
-        (u'TRX', u'BTC'),
-        (u'TRX', u'ETH'),
-        (u'POWR', u'BTC'),
-        (u'POWR', u'ETH'),
-        (u'ARK', u'BTC'),
-        (u'ARK', u'ETH'),
-        (u'YOYO', u'ETH'),
-        (u'XRP', u'BTC'),
-        (u'XRP', u'ETH'),
-        (u'MOD', u'BTC'),
-        (u'MOD', u'ETH'),
-        (u'ENJ', u'BTC'),
-        (u'ENJ', u'ETH'),
-        (u'STORJ', u'BTC'),
-        (u'STORJ', u'ETH'),
         (u'VEN', u'BNB'),
         (u'YOYO', u'BNB'),
         (u'POWR', u'BNB'),
-        (u'VEN', u'BTC'),
-        (u'VEN', u'ETH'),
-        (u'KMD', u'BTC'),
-        (u'KMD', u'ETH'),
         (u'NULS', u'BNB'),
-        (u'RCN', u'BTC'),
-        (u'RCN', u'ETH'),
         (u'RCN', u'BNB'),
-        (u'NULS', u'BTC'),
-        (u'NULS', u'ETH'),
-        (u'RDN', u'BTC'),
-        (u'RDN', u'ETH'),
         (u'RDN', u'BNB'),
-        (u'XMR', u'BTC'),
-        (u'XMR', u'ETH'),
         (u'DLT', u'BNB'),
         (u'WTC', u'BNB'),
-        (u'DLT', u'BTC'),
-        (u'DLT', u'ETH'),
-        (u'AMB', u'BTC'),
-        (u'AMB', u'ETH'),
         (u'AMB', u'BNB'),
-        (u'BCC', u'ETH'),
         (u'BCC', u'BNB'),
-        (u'BAT', u'BTC'),
-        (u'BAT', u'ETH'),
         (u'BAT', u'BNB'),
-        (u'BCPT', u'BTC'),
-        (u'BCPT', u'ETH'),
         (u'BCPT', u'BNB'),
-        (u'ARN', u'BTC'),
-        (u'ARN', u'ETH'),
-        (u'GVT', u'BTC'),
-        (u'GVT', u'ETH'),
-        (u'CDT', u'BTC'),
-        (u'CDT', u'ETH'),
-        (u'GXS', u'BTC'),
-        (u'GXS', u'ETH'),
         (u'NEO', u'BNB'),
-        (u'POE', u'BTC'),
-        (u'POE', u'ETH'),
-        (u'QSP', u'BTC'),
-        (u'QSP', u'ETH'),
         (u'QSP', u'BNB'),
-        (u'BTS', u'BTC'),
-        (u'BTS', u'ETH'),
         (u'BTS', u'BNB'),
-        (u'XZC', u'BTC'),
-        (u'XZC', u'ETH'),
         (u'XZC', u'BNB'),
-        (u'LSK', u'BTC'),
-        (u'LSK', u'ETH'),
         (u'LSK', u'BNB'),
-        (u'TNT', u'BTC'),
-        (u'TNT', u'ETH'),
-        (u'FUEL', u'BTC'),
-        (u'FUEL', u'ETH'),
-        (u'MANA', u'BTC'),
-        (u'MANA', u'ETH'),
-        (u'BCD', u'BTC'),
-        (u'BCD', u'ETH'),
-        (u'DGD', u'BTC'),
-        (u'DGD', u'ETH'),
         (u'IOTA', u'BNB'),
-        (u'ADX', u'BTC'),
-        (u'ADX', u'ETH'),
         (u'ADX', u'BNB'),
-        (u'ADA', u'BTC'),
-        (u'ADA', u'ETH'),
-        (u'PPT', u'BTC'),
-        (u'PPT', u'ETH'),
-        (u'CMT', u'BTC'),
-        (u'CMT', u'ETH'),
         (u'CMT', u'BNB'),
-        (u'XLM', u'BTC'),
-        (u'XLM', u'ETH'),
         (u'XLM', u'BNB'),
-        (u'CND', u'BTC'),
-        (u'CND', u'ETH'),
         (u'CND', u'BNB'),
-        (u'LEND', u'BTC'),
-        (u'LEND', u'ETH'),
-        (u'WABI', u'BTC'),
-        (u'WABI', u'ETH'),
         (u'WABI', u'BNB'),
-        (u'LTC', u'ETH'),
         (u'LTC', u'BNB'),
-        (u'TNB', u'BTC'),
-        (u'TNB', u'ETH'),
-        (u'WAVES', u'BTC'),
-        (u'WAVES', u'ETH'),
         (u'WAVES', u'BNB'),
-        (u'GTO', u'BTC'),
-        (u'GTO', u'ETH'),
         (u'GTO', u'BNB'),
-        (u'ICX', u'BTC'),
-        (u'ICX', u'ETH'),
         (u'ICX', u'BNB'),
-        (u'OST', u'BTC'),
-        (u'OST', u'ETH'),
         (u'OST', u'BNB'),
-        (u'ELF', u'BTC'),
-        (u'ELF', u'ETH'),
-        (u'AION', u'BTC'),
-        (u'AION', u'ETH'),
         (u'AION', u'BNB'),
-        (u'NEBL', u'BTC'),
-        (u'NEBL', u'ETH'),
         (u'NEBL', u'BNB'),
-        (u'BRD', u'BTC'),
-        (u'BRD', u'ETH'),
         (u'BRD', u'BNB'),
         (u'MCO', u'BNB'),
-        (u'EDO', u'BTC'),
-        (u'EDO', u'ETH'),
-        (u'WINGS', u'BTC'),
-        (u'WINGS', u'ETH'),
-        (u'NAV', u'BTC'),
-        (u'NAV', u'ETH'),
         (u'NAV', u'BNB'),
-        (u'LUN', u'BTC'),
-        (u'LUN', u'ETH'),
-        (u'TRIG', u'BTC'),
-        (u'TRIG', u'ETH'),
         (u'TRIG', u'BNB'),
-        (u'APPC', u'BTC'),
-        (u'APPC', u'ETH'),
         (u'APPC', u'BNB'),
-        (u'VIBE', u'BTC'),
-        (u'VIBE', u'ETH'),
-        (u'RLC', u'BTC'),
-        (u'RLC', u'ETH'),
         (u'RLC', u'BNB'),
-        (u'INS', u'BTC'),
-        (u'INS', u'ETH'),
-        (u'PIVX', u'BTC'),
-        (u'PIVX', u'ETH'),
         (u'PIVX', u'BNB'),
-        (u'IOST', u'BTC'),
-        (u'IOST', u'ETH'),
-        (u'CHAT', u'BTC'),
-        (u'CHAT', u'ETH'),
-        (u'STEEM', u'BTC'),
-        (u'STEEM', u'ETH'),
         (u'STEEM', u'BNB'),
-        (u'NANO', u'BTC'),
-        (u'NANO', u'ETH'),
         (u'NANO', u'BNB'),
-        (u'VIA', u'BTC'),
-        (u'VIA', u'ETH'),
         (u'VIA', u'BNB'),
-        (u'BLZ', u'BTC'),
-        (u'BLZ', u'ETH'),
         (u'BLZ', u'BNB'),
-        (u'AE', u'BTC'),
-        (u'AE', u'ETH'),
         (u'AE', u'BNB'),
-        (u'RPX', u'BTC'),
-        (u'RPX', u'ETH'),
         (u'RPX', u'BNB')
     ]):
 
-    strat = Strategy1()
+    strat = Strategy1BNB()
     strat.asset = assetPair[0]
     strat.otherasset = assetPair[1]
-    strat.start(delayTime=n * 4)
+    strat.start(delayTime=1 + n * 4)
